@@ -1,0 +1,5 @@
+episodes/*/narration.mp3
+episodes/_test/video.mp4
+episodes/_test/thumbnail.jpg
+episodes/_test/subtitles.srt
+__pycache__/
