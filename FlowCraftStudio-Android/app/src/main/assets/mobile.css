@@ -1,0 +1,149 @@
+/* FlowCraft — telefon ko'rinishi (CapCut uslubi). Faqat html.m sinfi bo'lganda ishlaydi. */
+html.m{--m-bg:#0d0c0b;--m-card:#191715;--m-card2:#221f1c;--m-line:rgba(255,240,220,.08);--m-ink:#f4ede2;--m-ink2:rgba(244,237,226,.62);--m-ink3:rgba(244,237,226,.38);--m-acc:#E6B054;--m-acc2:#C98E2E;--m-r:14px}
+html.m,html.m body{background:var(--m-bg)!important;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+html.m body{font-size:14px}
+html.m body::before,html.m .glow,html.m .g1,html.m .g2{display:none!important}
+html.m *{animation-duration:0s!important;transition-duration:.12s!important}
+html.m .panel,html.m .tcard,html.m .air,html.m .blk{backdrop-filter:none!important;box-shadow:none!important}
+
+/* ---- asosiy menyu: pastki panel ---- */
+html.m .side{position:fixed!important;left:0;right:0;bottom:0;top:auto!important;width:auto!important;height:calc(58px + env(safe-area-inset-bottom,0px));flex-direction:row!important;justify-content:space-around!important;align-items:flex-start!important;padding:6px 6px env(safe-area-inset-bottom,0px)!important;background:#121110!important;border:0!important;border-top:1px solid var(--m-line)!important;z-index:60}
+html.m .side-logo,html.m .side-sp,html.m .side .help,html.m .side .thb{display:none!important}
+html.m .sbtn{width:auto!important;flex:1;padding:6px 0!important;gap:3px!important;border-radius:10px!important;background:transparent!important;color:var(--m-ink3)!important;font-size:10.5px!important}
+html.m .sbtn svg{width:22px;height:22px}
+html.m .sbtn.on,html.m .sbtn[aria-current=page],html.m .sbtn:hover{color:var(--m-acc)!important;background:transparent!important;box-shadow:none!important}
+html.m .sbtn.on svg,html.m .sbtn.on span{color:var(--m-acc)!important}
+html.m body.side-on .screen{padding-left:0!important;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}
+html.m .top{padding:10px 16px!important}
+html.m .wrap{padding-left:16px!important;padding-right:16px!important}
+html.m h1.big{font-size:26px!important;line-height:1.15!important;letter-spacing:-.02em}
+html.m .lede{font-size:14px!important;line-height:1.5!important}
+
+/* bosh sahifa: ikki asosiy tugma yonma-yon kartochka */
+html.m .homeopts{display:grid!important;grid-template-columns:1fr 1fr;gap:10px!important}
+html.m .hop{flex-direction:column!important;align-items:flex-start!important;gap:10px!important;padding:14px!important;border-radius:var(--m-r)!important;background:var(--m-card)!important;border:1px solid var(--m-line)!important;min-height:120px}
+html.m .hop span span{display:none}
+html.m .hop b{font-size:14px;color:var(--m-ink)!important}
+html.m .tgrid,html.m #tplHome,html.m #tplAll,html.m #tpl{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+html.m .tcard{border-radius:12px!important;padding:6px!important}
+html.m .tmeta>span,html.m .tmeta .tneeds,html.m .tcard .tpimg,html.m .tplay{display:none!important}
+html.m .tmeta{padding:8px 4px 4px!important}
+html.m .tmeta b{font-size:12.5px!important;line-height:1.3;display:block}
+html.m .tnum{font-size:11px!important;padding:2px 7px!important}
+
+/* ---- studio: ixcham sarlavha + 8 bo'lakli chiziq ---- */
+html.m #rail{display:none!important}
+html.m .studio{padding:0 0 calc(76px + env(safe-area-inset-bottom,0px))!important}
+html.m #s-studio .top{position:sticky;top:0;z-index:30;background:var(--m-bg)!important;border-bottom:1px solid var(--m-line)!important}
+html.m .mstep{position:sticky;top:0;z-index:29;background:var(--m-bg);padding:10px 16px 12px;border-bottom:1px solid var(--m-line);display:flex;flex-direction:column;gap:8px;cursor:pointer}
+html.m .mstep-t{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--m-ink2)}
+html.m .mstep-t b{color:var(--m-ink);font-size:15px;font-weight:600}
+html.m .mstep-t svg{width:18px;height:18px;opacity:.6}
+html.m .mstep-bar{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+html.m .mstep-bar i{height:3px;border-radius:2px;background:rgba(255,240,220,.12)}
+html.m .mstep-bar i.d{background:var(--m-acc2)}
+html.m .mstep-bar i.n{background:var(--m-acc)}
+html.m .work{padding:14px 16px 0!important;gap:12px!important;max-width:none!important}
+html.m .step-h{display:none!important}
+html.m .panel{border-radius:var(--m-r)!important;padding:14px!important;background:var(--m-card)!important;border:1px solid var(--m-line)!important}
+html.m .panel h3{font-size:15px!important}
+html.m .panel>.sub,html.m .panel .sub{font-size:12.5px!important;line-height:1.45!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--m-ink3)!important}
+html.m .two{display:flex!important;flex-direction:column;gap:12px}
+html.m .pill{min-height:38px}
+html.m .row{gap:8px!important}
+
+/* yig'ilgan bo'lim qatori (bosilsa pastdan oyna ochiladi) */
+html.m .mrow2{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:var(--m-r);background:var(--m-card);border:1px solid var(--m-line);color:var(--m-ink);text-align:left;font:inherit;min-height:56px}
+html.m .mrow2 .mi{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--m-card2);color:var(--m-acc);flex:none}
+html.m .mrow2 .mi svg{width:18px;height:18px}
+html.m .mrow2 .mt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+html.m .mrow2 .mt b{font-size:14px;font-weight:600}
+html.m .mrow2 .mt small{font-size:12.5px;color:var(--m-ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.m .mrow2 .mc{color:var(--m-ink3);flex:none}
+html.m .mgroup{display:flex;flex-direction:column;gap:8px}
+html.m .mhold{display:none}
+
+/* pastdan chiquvchi oyna */
+html.m .msheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;opacity:0;pointer-events:none}
+html.m .msheet-bg.on{opacity:1;pointer-events:auto}
+html.m .msheet{position:fixed;left:0;right:0;bottom:0;max-height:82vh;z-index:201;background:#161412;border-radius:18px 18px 0 0;border-top:1px solid var(--m-line);transform:translateY(105%);display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
+html.m .msheet.on{transform:none;transition:transform .2s ease!important}
+html.m .msheet-h{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 8px;border-bottom:1px solid var(--m-line)}
+html.m .msheet-h::before{content:"";position:absolute;left:50%;top:6px;width:36px;height:4px;margin-left:-18px;border-radius:2px;background:rgba(255,255,255,.18)}
+html.m .msheet-h b{font-size:15px;padding-top:6px}
+html.m .msheet-x{min-width:64px;height:34px;border-radius:10px;background:var(--m-acc);color:#1b1306;font-weight:700;border:0;margin-top:6px}
+html.m .msheet-b{overflow:auto;padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px}
+html.m .msheet-b .seg{flex-wrap:wrap!important;overflow:visible!important}
+html.m .msheet-b .styles{grid-template-columns:repeat(3,1fr)!important;gap:8px!important}
+html.m .msheet-b .sty{flex-direction:column!important;align-items:stretch!important;text-align:center!important;padding:6px!important;font-size:11.5px!important;gap:6px!important}
+html.m .msheet-b .sty .swc{width:100%!important;height:auto!important;aspect-ratio:16/10;border-radius:8px!important}
+html.m .msheet-b .panel{border:0!important;padding:0!important;background:transparent!important}
+html.m .msheet-b .panel>h3{display:none}
+html.m .msteps{display:flex;flex-direction:column;gap:6px}
+html.m .msteps button{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--m-card);border:1px solid var(--m-line);color:var(--m-ink);font:inherit;text-align:left}
+html.m .msteps button i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;border:1.5px solid rgba(255,240,220,.2);color:var(--m-ink3)}
+html.m .msteps button.d i{background:var(--m-acc2);border-color:var(--m-acc2);color:#1b1306}
+html.m .msteps button.n{border-color:var(--m-acc)}
+html.m .msteps button.n i{border-color:var(--m-acc);color:var(--m-acc)}
+html.m .msteps button.l{opacity:.45}
+
+/* pastki tugmalar (Orqaga / Keyingisi) */
+html.m #bottom{left:0!important;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px))!important;background:#121110!important;border-top:1px solid var(--m-line)!important}
+html.m #bottom .saved{display:none}
+html.m #bottom .primary{flex:1;justify-content:center;height:46px!important;border-radius:12px!important}
+html.m #bottom #back{width:46px;height:46px!important;border-radius:12px!important;justify-content:center}
+html.m #bottom .in{gap:10px!important}
+
+/* ---- montaj: CapCut tartibi ---- */
+html.m #s-editor .ed2{display:flex!important;flex-direction:column;height:100dvh!important;padding:0!important;gap:0!important}
+html.m .etop{padding:8px 10px!important;gap:6px!important;border:0!important;background:var(--m-bg)!important;min-height:52px}
+html.m .etop #edBack span,html.m .etop .esep,html.m .etop [data-screen=s-home]{display:none!important}
+html.m .etop .etitle{flex:1;min-width:0;text-align:center}
+html.m .etop .etitle b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+html.m .etop .primary{height:34px!important;padding:0 14px!important;border-radius:10px!important}
+html.m .etop .primary .go{display:none}
+html.m .emain{display:flex!important;flex-direction:column;flex:0 0 auto;gap:0!important}
+html.m #lp,html.m #rp{display:none}
+html.m #pp{order:0;border:0!important;border-radius:0!important;padding:0!important;background:#000!important}
+html.m #pp .ep-h,html.m #pp>.row:first-child{display:none!important}
+html.m #pp .pv{border-radius:0!important;padding:0!important}
+html.m #pp .stage{border-radius:0!important}
+html.m .etl{flex:1 1 auto;min-height:0;border:0!important;border-radius:0!important;padding:4px 0 0!important;background:var(--m-bg)!important;display:flex;flex-direction:column}
+html.m .etl .tl-h{padding:4px 10px!important}
+html.m .etl .tl-h .ep-t,html.m .etl .tl-h .note{display:none!important}
+html.m .tlw{flex:1;min-height:150px}
+/* asboblar paneli */
+html.m .mtools{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:#121110;border-top:1px solid var(--m-line);flex:none}
+html.m .mtools::-webkit-scrollbar{display:none}
+html.m .mtools button{flex:0 0 auto;min-width:64px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border:0;background:transparent;color:var(--m-ink2);font:inherit;font-size:10.5px;border-radius:10px}
+html.m .mtools button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+html.m .mtools button.on{color:var(--m-acc)}
+/* asbob oynasi: aside pastdan chiqadi */
+html.m #lp.mopen,html.m #rp.mopen{display:flex!important;flex-direction:column;position:fixed;left:0;right:0;bottom:0;height:min(58vh,520px);z-index:150;border-radius:18px 18px 0 0!important;background:#161412!important;border:0!important;border-top:1px solid var(--m-line)!important;padding:0 0 env(safe-area-inset-bottom,0px)!important}
+html.m #lp.mopen .ptabs,html.m #rp.mopen .ptabs{display:none!important}
+html.m .mtool-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;border-bottom:1px solid var(--m-line);flex:none}
+html.m .mtool-h b{font-size:15px}
+html.m #lp.mopen .tool.on,html.m #rp.mopen .tool.on{overflow:auto;flex:1;padding:12px 16px!important}
+html.m .mgrid{grid-template-columns:repeat(3,1fr)!important}
+
+/* aktivatsiya va sozlamalar */
+html.m .act{margin:16px!important;padding:18px!important;border-radius:16px!important}
+html.m .set-nav{display:flex!important;overflow-x:auto;flex-wrap:nowrap!important;gap:6px!important;scrollbar-width:none;padding-bottom:4px}
+html.m .set-nav .pill{flex:none}
+html.m .setg,html.m .set-grid{display:flex!important;flex-direction:column}
+html.m .toast{left:16px!important;right:16px!important;width:auto!important;max-width:none!important;transform:translateY(20px)!important;bottom:calc(84px + env(safe-area-inset-bottom,0px))!important;border-radius:12px!important;text-align:center}
+html.m .toast.on{transform:none!important}
+
+/* 4.0.4: tugmalar balandligi matnga moslashadi (katta shriftli telefonlarda matn tugmadan chiqib ketmasin) */
+html.m .pill{height:auto;min-height:40px;padding-top:6px;padding-bottom:6px;line-height:1.2}
+html.m .pill.sm{min-height:32px;padding-top:4px;padding-bottom:4px}
+html.m .pill.xs{min-height:26px;padding-top:3px;padding-bottom:3px}
+html.m .seg .pill{height:auto;min-height:34px}
+html.m .tabs .pill{height:auto;min-height:32px}
+html.m .bottom .pill{height:auto;min-height:38px}
+html.m .set-nav .pill{height:auto;min-height:42px}
+html.m .primary{height:auto;min-height:48px;padding-top:6px;padding-bottom:6px;line-height:1.2}
+html.m button,html.m .pill,html.m .chip{line-height:1.2}
+html.m .row.between:has(#planTpl){flex-wrap:wrap;gap:8px}
+html.m .row:has(> #planTpl){min-width:0;max-width:100%;flex-wrap:wrap}
+html.m #planTpl{flex:1 1 140px;display:block}
