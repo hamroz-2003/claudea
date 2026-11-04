@@ -1,0 +1,15 @@
+# Build natijalari va IDE fayllari
+.gradle/
+build/
+app/build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+# Imzo kalitlari HECH QACHON git'ga tushmasin
+*.jks
+*.keystore
+keystore.properties

@@ -4,7 +4,7 @@
    Ma'lumotlar qurilmaning IndexedDB xotirasida saqlanadi. */
 (function(){
 'use strict';
-const VERSION='4.0.4';
+const VERSION='4.1.0';
 const LIC_PUB='lSt+CKyhSZI38Pzghyc8+3aV1I3ynfSTV+LLNjBT7Z4=';
 const realFetch=window.fetch.bind(window);
 /* APK qobig'idagi ko'prik nomi "AndroidDownloader" (avval "Android" deb qidirilardi — shu sabab telefonda video galereyaga saqlanmasdi) */
@@ -223,7 +223,7 @@ async function render(id,job){const S=JOBS[id];const pid=job.project;
   else if(isAndroid){if(!AND.finishSave())throw new Error('Videoni galereyaga saqlab bo\'lmadi');S.output='Galereya → Movies/FlowCraft/'+name}
   else{const blob=new Blob(parts,{type:'video/mp4'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),120000);S.output='Yuklab olinganlar → '+name}
   S.size=size;S.status='done';S.progress=1}
- catch(e){for(const k of [...srcs.keys()])dropSrc(k);S.status=S.canceled?'canceled':'error';S.error=e.message||String(e);if(isDesk){desk('/__fc/save/cancel').catch(()=>{})}}}
+ catch(e){for(const k of [...srcs.keys()])dropSrc(k);S.status=S.canceled?'canceled':'error';S.error=e.message||String(e);if(isDesk){desk('/__fc/save/cancel').catch(()=>{})}if(isAndroid&&typeof AND.cancelSave==='function'){try{AND.cancelSave()}catch(_){}}}}
 
 /* ---------- 8. So'rovlar yo'riqnomasi ---------- */
 async function route(path,init){const u=new URL(path,location.href),p=decodeURIComponent(u.pathname.replace(/^.*?(\/api\/|\/p\/)/,'$1')),q=Object.fromEntries(u.searchParams),m=(init&&init.method||'GET').toUpperCase();

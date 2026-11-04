@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlowCraft Studio</string>
+    <string name="toast_saved">✓ Video galereyaga saqlandi (%1$s)</string>
+    <string name="toast_save_error">Saqlashda xatolik: %1$s</string>
+    <string name="toast_exit">Chiqish uchun yana bir marta bosing</string>
+    <string name="toast_exit_saving">Video saqlanmoqda! Chiqsangiz jarayon to\'xtaydi. Chiqish uchun yana bosing</string>
+    <string name="toast_renderer_gone">Sahifa xotira yetishmagani uchun qayta yuklandi. Loyihalaringiz saqlangan</string>
+    <string name="toast_no_app">Bu havolani ochadigan ilova topilmadi</string>
+    <string name="toast_low_space">Xotirada joy yetarli emas. Kamida %1$d MB bo\'sh joy kerak</string>
+    <string name="toast_no_webview">Android System WebView o\'rnatilmagan yoki o\'chirilgan. Play Market\'dan yangilang</string>
+    <string name="toast_storage_denied">Ruxsat berilmadi: video ilova papkasiga saqlanadi (Android/data/…/Movies)</string>
+</resources>
