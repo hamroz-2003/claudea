@@ -26,8 +26,8 @@ android {
         applicationId = "com.example.flowcraftmobile"
         minSdk = 24
         targetSdk = 36
-        versionCode = 410          // 4.0.4 (versionCode=1) dan katta — ustidan yangilanadi
-        versionName = "4.1.0"
+        versionCode = 420          // 4.0.4 (versionCode=1) va 4.1.0 (410) dan katta — ustidan yangilanadi
+        versionName = "4.2.0"
     }
 
     signingConfigs {

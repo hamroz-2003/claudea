@@ -29,6 +29,12 @@ class WebAppBridge(private val host: Host) {
         fun openAsset(path: String): ByteArray?
         fun listAssets(dir: String): Array<String>
         fun versionName(): String
+        fun deviceInfo(): String
+        fun openWebViewUpdate(): Boolean
+        fun shareText(title: String, text: String): Boolean
+        fun saveTextFile(name: String, text: String): String
+        fun licenseKeyFromClipboard(): String
+        fun copyText(text: String): Boolean
     }
 
     // ---------------------------------------------------------------- video saqlash
@@ -104,9 +110,37 @@ class WebAppBridge(private val host: Host) {
     @JavascriptInterface
     fun appVersion(): String = host.versionName()
 
+    // ---------------------------------------------------------------- o'z-o'ziga yordam (4.2)
+
+    /** Qurilma, xotira va WebView versiyasi (JSON) — "Tizim tekshiruvi" uchun. */
+    @JavascriptInterface
+    fun deviceInfo(): String = if (host.isTrustedPage()) host.deviceInfo() else "{}"
+
+    /** Android System WebView ni Play Market'da ochadi (video yig'ish uchun yangi versiya kerak bo'lsa). */
+    @JavascriptInterface
+    fun openWebViewUpdate(): Boolean = host.isTrustedPage() && host.openWebViewUpdate()
+
+    /** Tizimning "Ulashish" oynasi (Telegram va h.k. ga hisobot yuborish). */
+    @JavascriptInterface
+    fun shareText(title: String?, text: String?): Boolean =
+        host.isTrustedPage() && !text.isNullOrEmpty() && host.shareText(title.orEmpty(), text.take(MAX_TEXT))
+
+    /** Matnli faylni Download/FlowCraft ga saqlaydi. @return joy nomi yoki "" (xato). */
+    @JavascriptInterface
+    fun saveTextFile(name: String?, text: String?): String =
+        if (!host.isTrustedPage() || text.isNullOrEmpty()) "" else host.saveTextFile(name.orEmpty(), text.take(MAX_TEXT))
+
+    /** Buferda litsenziya kaliti bo'lsa — o'shani qaytaradi, aks holda "". Boshqa matn qaytarilmaydi. */
+    @JavascriptInterface
+    fun licenseKeyFromClipboard(): String = if (host.isTrustedPage()) host.licenseKeyFromClipboard() else ""
+
+    @JavascriptInterface
+    fun copyText(text: String?): Boolean = host.isTrustedPage() && !text.isNullOrEmpty() && host.copyText(text.take(MAX_TEXT))
+
     companion object {
         private const val TAG = "FlowCraft/Bridge"
         const val JS_NAME = "AndroidDownloader"
+        private const val MAX_TEXT = 2_000_000
         private val AUDIO_EXT = Regex("\\.(mp3|m4a|aac|wav|ogg|opus)$", RegexOption.IGNORE_CASE)
     }
 }

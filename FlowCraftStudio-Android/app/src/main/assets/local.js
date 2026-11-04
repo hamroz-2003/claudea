@@ -4,7 +4,7 @@
    Ma'lumotlar qurilmaning IndexedDB xotirasida saqlanadi. */
 (function(){
 'use strict';
-const VERSION='4.1.0';
+const VERSION='4.2.0';
 const LIC_PUB='lSt+CKyhSZI38Pzghyc8+3aV1I3ynfSTV+LLNjBT7Z4=';
 const realFetch=window.fetch.bind(window);
 /* APK qobig'idagi ko'prik nomi "AndroidDownloader" (avval "Android" deb qidirilardi — shu sabab telefonda video galereyaga saqlanmasdi) */
@@ -168,15 +168,31 @@ async function audioSeg(L,t0,len,SR){const oc=new OfflineAudioContext(2,Math.max
   const src=oc.createBufferSource();src.buffer=x.buf;src.loop=!!x.loop;const g=oc.createGain();g.gain.value=x.vol;src.connect(g).connect(oc.destination);src.start(when,off)}
  return await oc.startRendering()}
 async function pickAudioCodec(){if(!window.AudioEncoder)return null;for(const c of [{codec:'mp4a.40.2',mux:'aac'},{codec:'opus',mux:'opus'}]){try{const s=await AudioEncoder.isConfigSupported({codec:c.codec,numberOfChannels:2,sampleRate:48000,bitrate:160000});if(s.supported)return c}catch(_){}}return null}
-async function pickVideoCodec(W,H,fps,br){for(const hw of ['prefer-hardware','no-preference'])for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e028','avc1.42001f']){try{const s=await VideoEncoder.isConfigSupported({codec,width:W,height:H,bitrate:br,framerate:fps,hardwareAcceleration:hw,avc:{format:'avc'}});if(s.supported)return{codec,hw}}catch(_){}}return null}
-async function render(id,job){const S=JOBS[id];const pid=job.project;
+async function pickVideoCodec(W,H,fps,br,soft){for(const hw of (soft?['prefer-software','no-preference']:['prefer-hardware','no-preference']))for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e028','avc1.42001f']){try{const s=await VideoEncoder.isConfigSupported({codec,width:W,height:H,bitrate:br,framerate:fps,hardwareAcceleration:hw,avc:{format:'avc'}});if(s.supported)return{codec,hw}}catch(_){}}return null}
+/* 4.2: sifat qo'llanmasa — avtomatik pastroq sifat (4K → 1080p → 720p) */
+const QSIZE={'720':[1280,720],'1080':[1920,1080],'2160':[3840,2160]};
+async function pickSize(job,fps,soft){const QL=['2160','1080','720'];let i=QL.indexOf(String(job.quality||'720'));if(i<0)i=2;
+ for(;i<QL.length;i++){let [W,H]=QSIZE[QL[i]];if(job.format==='short')[W,H]=[H,W];const br=W*H>2e6?8e6:4e6;const codec=await pickVideoCodec(W,H,fps,br,soft);if(codec)return{W,H,br,codec,q:QL[i]}}return null}
+/* kodlovchi navbati bo'shashini kutish; qotib qolsa — xato (abadiy kutib qolmaydi) */
+function drain(enc,lim,ms,msg){return new Promise((res,rej)=>{const t0=Date.now();const w=()=>{if(enc.encodeQueueSize<=lim)return res();if(Date.now()-t0>ms)return rej(new Error(msg));setTimeout(w,5)};w()})}
+function withTimeout(p,ms,msg){let t;return Promise.race([p,new Promise((_,rej)=>{t=setTimeout(()=>rej(new Error(msg)),ms)})]).finally(()=>clearTimeout(t))}
+const RETRYABLE=/^Video kodlash xatosi/;
+/* render = bir urinish + kerak bo'lsa xavfsiz (protsessor) rejimda ikkinchi urinish + diagnostikaga yozish */
+async function render(id,job){const S=JOBS[id],t0=performance.now();
+ await renderOnce(id,job);
+ if(S._retry){const why=S._retry;S._retry=null;try{DIAG.add({k:'render',n:'urinish 1',ms:performance.now()-t0,ok:false,msg:why,x:{encoder:S.encoder||''}})}catch(_){}
+  S.progress=0;S.stage='Xavfsiz rejimda qayta yig\'ilmoqda';S.notice='videokarta xato berdi, protsessor bilan yig\'ildi';
+  await renderOnce(id,Object.assign({},job,{_soft:true}))}
+ try{const sec=(performance.now()-t0)/1000;DIAG.add({k:'render',n:(S.q||job.quality||'720')+'p',ms:sec*1000,ok:S.status==='done',msg:S.status==='done'?(S.notice||''):(S.error||''),
+  x:{clips:(job.clips||[]).length,videoSec:S.videoSec||0,encoder:S.encoder||'',speed:S.videoSec&&sec>0?+(S.videoSec/sec).toFixed(2):0}})}catch(_){}}
+async function renderOnce(id,job){const S=JOBS[id];const pid=job.project;
  const srcs=new Map();const dropSrc=k=>{const x=srcs.get(k);if(!x)return;try{x.b&&x.b.close&&x.b.close();x.v&&x.v.close()}catch(_){}srcs.delete(k)};
  try{
   if(!window.VideoEncoder||!window.Mp4Muxer)throw new Error('Bu qurilmada video yig\'ish qo\'llab-quvvatlanmaydi (WebCodecs yo\'q). Chrome yoki yangiroq tizim kerak');
-  const q={'720':[1280,720],'1080':[1920,1080],'2160':[3840,2160]}[job.quality]||[1280,720];let [W,H]=q;if(job.format==='short')[W,H]=[H,W];
-  const fps=job.fps||30,br=W*H>2e6?8e6:4e6,cl=job.clips||[];if(!cl.length)throw new Error('Montaj bo\'sh');
-  const vcodec=await pickVideoCodec(W,H,fps,br);if(!vcodec)throw new Error(`Qurilma ${W}x${H} videoni kodlay olmaydi. Sifatni pasaytiring (720p)`);
-  const starts=[];let T=0;for(const c of cl){starts.push(T);T+=c.d}
+  const fps=job.fps||30,cl=job.clips||[];if(!cl.length)throw new Error('Montaj bo\'sh');
+  const sz=await pickSize(job,fps,!!job._soft);if(!sz)throw new Error('Bu qurilma videoni kodlay olmaydi. Sozlamalar → Yordam → "Tizim tekshiruvi" dan WebView\'ni yangilang');
+  const {W,H,br}=sz,vcodec=sz.codec;S.q=sz.q;if(sz.q!==String(job.quality||'720'))S.notice=(S.notice?S.notice+'; ':'')+(job.quality||'720')+'p qo\'llanmadi, '+sz.q+'p da yig\'ildi';
+  const starts=[];let T=0;for(const c of cl){starts.push(T);T+=c.d}S.videoSec=T;
   S.stage='Ovoz tayyorlanmoqda';const acodec=await pickAudioCodec();let asrc=null;if(acodec&&(job.audio?.voice||job.audio?.music)){asrc=await audioSources(job,pid,cl,starts);if(!asrc.length)asrc=null}
   /* chiqish: Android'da to'g'ridan-to'g'ri galereyaga, brauzerda bo'laklar */
   const name=(String(job.name||'video').replace(/[\\/:*?"<>|]+/g,' ').trim().slice(0,60)||'video')+'_'+new Date().toISOString().slice(0,16).replace(/[-:T]/g,'')+'.mp4';
@@ -207,23 +223,53 @@ async function render(id,job){const S=JOBS[id];const pid=job.project;
    if(useTr&&ci<cl.length-1){const left=starts[ci+1]-t;if(left<td/2)await draw(ci+1,0,ease(0.5-left/td))}
    ctx.filter='none';if(subs[ci])ctx.drawImage(subs[ci],0,0,W,H);for(const o of ov)if(t>=o.s&&t<o.s+o.d)ctx.drawImage(o.bmp,0,0,W,H);
    const vf=new VideoFrame(cv,{timestamp:Math.round(t*1e6),duration:Math.round(1e6/fps)});venc.encode(vf,{keyFrame:f%(fps*2)===0});vf.close();
-   if(venc.encodeQueueSize>8)await new Promise(r=>{const w=()=>venc.encodeQueueSize>4?setTimeout(w,5):r();w()});
+   if(venc.encodeQueueSize>8)await drain(venc,4,25000,'Video kodlash xatosi: kodlovchi javob bermay qoldi');
    if(f%15===0){S.progress=0.05+0.85*f/N;await new Promise(r=>setTimeout(r,0))}}
-  await venc.flush();venc.close();
+  await withTimeout(venc.flush(),90000,'Video kodlash xatosi: kodlovchi yakunlanmadi');venc.close();
   for(const k of [...srcs.keys()])dropSrc(k);
   if(asrc){S.stage='Ovoz kodlanmoqda';let aerr=null;const aenc=new AudioEncoder({output:(ch,meta)=>muxer.addAudioChunk(ch,meta),error:e=>{aerr=e}});aenc.configure({codec:acodec.codec,numberOfChannels:2,sampleRate:48000,bitrate:160000});
    const SEG=20,total=Math.round(T*48000);let done=0;
    for(let t0=0;t0<T-1e-6;t0+=SEG){if(S.canceled)throw new Error('To\'xtatildi');const len=Math.min(SEG,T-t0),ab=await audioSeg(asrc,t0,len,48000);
     const L=ab.getChannelData(0),R=ab.getChannelData(1),step=48000;for(let i=0;i<ab.length&&done<total;i+=step){const n=Math.min(step,ab.length-i,total-done),d=new Float32Array(n*2);d.set(L.subarray(i,i+n),0);d.set(R.subarray(i,i+n),n);
      const ad=new AudioData({format:'f32-planar',sampleRate:48000,numberOfFrames:n,numberOfChannels:2,timestamp:Math.round(done/48000*1e6),data:d});aenc.encode(ad);ad.close();done+=n;if(aerr)throw new Error('Ovoz kodlash xatosi: '+aerr.message)}
-    if(aenc.encodeQueueSize>16)await new Promise(r=>{const w=()=>aenc.encodeQueueSize>4?setTimeout(w,5):r();w()});S.progress=0.9+0.07*Math.min(1,(t0+len)/T)}
-   await aenc.flush();aenc.close()}
+    if(aenc.encodeQueueSize>16)await drain(aenc,4,25000,'Ovoz kodlash xatosi: kodlovchi javob bermay qoldi');S.progress=0.9+0.07*Math.min(1,(t0+len)/T)}
+   await withTimeout(aenc.flush(),60000,'Ovoz kodlash xatosi: kodlovchi yakunlanmadi');aenc.close()}
   muxer.finalize();S.progress=0.97;S.stage='Saqlanmoqda';
   if(isDesk){await chain;if(deskErr)throw deskErr;const r=await desk('/__fc/save/finish');if(!r.ok)throw new Error(r.message||'Videoni saqlab bo\'lmadi');S.output=r.path}
   else if(isAndroid){if(!AND.finishSave())throw new Error('Videoni galereyaga saqlab bo\'lmadi');S.output='Galereya → Movies/FlowCraft/'+name}
   else{const blob=new Blob(parts,{type:'video/mp4'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),120000);S.output='Yuklab olinganlar → '+name}
-  S.size=size;S.status='done';S.progress=1}
- catch(e){for(const k of [...srcs.keys()])dropSrc(k);S.status=S.canceled?'canceled':'error';S.error=e.message||String(e);if(isDesk){desk('/__fc/save/cancel').catch(()=>{})}if(isAndroid&&typeof AND.cancelSave==='function'){try{AND.cancelSave()}catch(_){}}}}
+  if(S.notice&&S.output)S.output+=' · '+S.notice;S.size=size;S.status='done';S.progress=1}
+ catch(e){for(const k of [...srcs.keys()])dropSrc(k);const em=e.message||String(e);if(!S.canceled&&!job._soft&&RETRYABLE.test(em))S._retry=em;else{S.status=S.canceled?'canceled':'error';S.error=em}if(isDesk){desk('/__fc/save/cancel').catch(()=>{})}if(isAndroid&&typeof AND.cancelSave==='function'){try{AND.cancelSave()}catch(_){}}}}
+
+/* ---------- 7b. Diagnostika (4.2: telefonda ham yoziladi va hisobot beradi) ---------- */
+const DIAG={ev:null,max:600,t:null,last:'',
+ async load(){if(this.ev)return this.ev;try{this.ev=(await DB.get('kv','diag'))||[]}catch(_){this.ev=[]}return this.ev},
+ save(){clearTimeout(this.t);this.t=setTimeout(()=>{DB.put('kv','diag',(this.ev||[]).slice(-this.max)).catch(()=>{})},1500)},
+ async add(list){const ev=await this.load();for(const e of (Array.isArray(list)?list:[list])){if(!e||!e.n)continue;
+   ev.push({k:String(e.k||'ui').slice(0,20),n:String(e.n).slice(0,120),ms:Math.round(+e.ms||0),ok:e.ok!==false,msg:String(e.msg||'').slice(0,600),w:String(e.w||'').slice(0,60),x:e.x&&typeof e.x==='object'?e.x:null,t:+e.t||Date.now()})}
+  if(ev.length>this.max)ev.splice(0,ev.length-this.max);this.save()},
+ async clear(){this.ev=[];await DB.put('kv','diag',[]).catch(()=>{})},
+ async summary(){const ev=await this.load(),g=new Map();
+  for(const e of ev){if(e.k==='render')continue;const id=e.k+'|'+e.n;let r=g.get(id);if(!r){r={k:e.k,n:e.n,count:0,errors:0,sum:0,timed:0,max:0,lastErr:''};g.set(id,r)}
+   r.count++;if(!e.ok){r.errors++;if(e.msg)r.lastErr=e.msg}if(e.ms>0){r.sum+=e.ms;r.timed++;if(e.ms>r.max)r.max=e.ms}}
+  const lim=k=>k==='gemini'||k==='ai'?60000:8000;
+  const rows=[...g.values()].map(r=>{const avg=r.timed?Math.round(r.sum/r.timed):0;return{k:r.k,n:r.n,count:r.count,errors:r.errors,avg,max:r.max,slow:r.k!=='js'&&avg>lim(r.k),lastErr:r.lastErr}})
+   .sort((a,b)=>b.errors-a.errors||(b.slow?1:0)-(a.slow?1:0)||b.count-a.count);
+  return{ok:true,total:ev.length,rows,renders:ev.filter(e=>e.k==='render').slice(-10)}},
+ async report(){const sm=await this.summary(),ev=await this.load(),L=[];let dev={};try{dev=isAndroid&&AND.deviceInfo?JSON.parse(AND.deviceInfo()||'{}'):{}}catch(_){}
+  let est={};try{if(navigator.storage&&navigator.storage.estimate)est=await navigator.storage.estimate()}catch(_){}let pers='?';try{pers=navigator.storage&&navigator.storage.persisted?String(await navigator.storage.persisted()):'?'}catch(_){}
+  let lic={};try{lic=await license()}catch(_){}const mb=b=>b?Math.round(b/1048576)+' MB':'?';
+  L.push('FlowCraft diagnostika hisoboti','Sana: '+new Date().toLocaleString(),'Versiya: '+VERSION+(dev.app?' (APK '+dev.app+')':''),
+   'Qurilma: '+(dev.maker?dev.maker+' '+dev.model+' · Android '+dev.android+' (SDK '+dev.sdk+') · RAM '+dev.ramMb+' MB · bo\'sh joy '+dev.freeMb+' MB':(isDesk?'Windows':'Brauzer')),
+   'WebView: '+(dev.webviewPkg?dev.webviewPkg+' '+dev.webviewVersion:'—'),'Brauzer: '+navigator.userAgent,
+   'WebCodecs: video='+(!!window.VideoEncoder)+' audio='+(!!window.AudioEncoder)+' · Xotira: '+mb(est.usage)+' / '+mb(est.quota)+' · doimiy='+pers,
+   'Litsenziya: '+(lic.ok?'faol · '+(lic.plan||'')+(lic.expires?' · '+lic.expires+' gacha':''):'faol emas'+(lic.message?' ('+lic.message+')':''))+' · ID '+(lic.id||'?'),'',
+   '== Xulosa ('+sm.total+' amal) ==');
+  for(const r of sm.rows.slice(0,40))L.push((r.errors?'XATO×'+r.errors:r.slow?'SEKIN':'ok').padEnd(8)+' '+r.k+' · '+r.n+' · '+r.count+'× · o\'rtacha '+r.avg+' ms'+(r.lastErr?' · '+r.lastErr.replace(/\s+/g,' ').slice(0,200):''));
+  L.push('','== Renderlar ==');for(const r of sm.renders)L.push((r.ok?'ok ':'XATO')+' '+r.n+' · '+Math.round(r.ms/1000)+' s · '+JSON.stringify(r.x||{})+(r.msg?' · '+r.msg:''));
+  L.push('','== Oxirgi 60 hodisa ==');for(const e of ev.slice(-60))L.push(new Date(e.t).toLocaleTimeString()+' '+(e.ok?'  ':'! ')+e.k+' '+e.n+(e.ms?' '+e.ms+'ms':'')+(e.msg?' · '+e.msg.replace(/\s+/g,' ').slice(0,240):''));
+  this.last=L.join('\n');return this.last}};
+window.FCDIAG=DIAG;
 
 /* ---------- 8. So'rovlar yo'riqnomasi ---------- */
 async function route(path,init){const u=new URL(path,location.href),p=decodeURIComponent(u.pathname.replace(/^.*?(\/api\/|\/p\/)/,'$1')),q=Object.fromEntries(u.searchParams),m=(init&&init.method||'GET').toUpperCase();
@@ -233,9 +279,15 @@ async function route(path,init){const u=new URL(path,location.href),p=decodeURIC
   case '/api/license':if(m==='POST'){const bj=await bodyJSON(init);const k=bj.key||bj.Key||'';const id=await deviceId();const v=verifyKey(k,id);if(!v.ok)return J({ok:false,message:v.message,id});await DB.put('kv','licKey',k.trim().toUpperCase())}return J(await license());
   case '/api/info':return J({version:VERSION,ffmpeg:{status:'ready',encoder:window.VideoEncoder?'webcodecs':'yo\'q'},outDir:isAndroid?'Galereya → Movies/FlowCraft':isDesk?'Videos\\FlowCraft':'Yuklab olinganlar (Downloads)',local:true});
   case '/api/heartbeat':if(isDesk)desk('/__fc/beat').catch(()=>{});return J({ok:true});
-  case '/api/session':case '/api/bye':case '/api/diag/event':case '/api/diag/report':case '/api/diag/clear':case '/api/ffmpeg/retry':case '/api/update/apply':return J({ok:true});
-  case '/api/reveal':if(isDesk)await desk('/__fc/reveal?path='+encodeURIComponent(q.path||'')).catch(()=>{});return J({ok:true});
-  case '/api/diag/summary':return J({ok:true,events:[]});
+  case '/api/diag/event':await DIAG.add(await bodyJSON(init));return J({ok:true});
+  case '/api/diag/clear':await DIAG.clear();return J({ok:true});
+  case '/api/diag/summary':return J(await DIAG.summary());
+  case '/api/diag/report':{const text=await DIAG.report(),name='FlowCraft_hisobot_'+new Date().toISOString().slice(0,16).replace(/[-:T]/g,'')+'.txt';
+   if(isAndroid&&AND.saveTextFile){const at=AND.saveTextFile(name,text);if(!at)return J({ok:false,message:'Hisobotni saqlab bo\'lmadi. "Nusxalash" tugmasidan foydalaning',text});return J({ok:true,path:at,text})}
+   if(!isDesk){try{const u=URL.createObjectURL(new Blob([text],{type:'text/plain'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}catch(_){}}
+   return J({ok:true,path:name,text})}
+  case '/api/session':case '/api/bye':case '/api/ffmpeg/retry':case '/api/update/apply':return J({ok:true});
+  case '/api/reveal':if(isDesk)await desk('/__fc/reveal?path='+encodeURIComponent(q.path||'')).catch(()=>{});else if(isAndroid&&AND.shareText&&DIAG.last&&/hisobot/i.test(q.path||''))AND.shareText('FlowCraft hisobot',DIAG.last);return J({ok:true});
   case '/api/history':return J([]);
   case '/api/update/check':return J({ok:true,latest:VERSION,update:false});
   case '/api/ai/test':return J({ok:false,message:'Telefonda faqat Gemini kaliti ishlaydi'});
@@ -284,5 +336,5 @@ if(isDesk||isAndroid){const ext=u=>/^https?:\/\//i.test(u)&&!u.startsWith(locati
  const wo=window.open;window.open=function(u,...r){if(u&&ext(String(u))){openExt(String(u));return null}return wo.call(window,u,...r)}}
 window.FCL={url(pid,rel,th){const k=pid+'/'+rel;if(th){const t=URLS.get(thKey(k));if(t)return t;if(VIDX.test(rel))return ''}return URLS.get(k)||''},
  videoUrl(pid,rel){return URLS.get(pid+'/'+rel)||''},tplUrl(id){return URLS.get('_tpl/'+id)||''},
- async boot(){await DB.open();if(isDesk)await importLegacy().catch(e=>console.warn('eski loyihalar: '+e.message));for(const k of await DB.keys('files','_tpl/')){await fileURL('_tpl',k.slice(5))}},isAndroid,version:VERSION};
+ async boot(){await DB.open();try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>p||navigator.storage.persist()).catch(()=>{})}catch(_){}if(isDesk)await importLegacy().catch(e=>console.warn('eski loyihalar: '+e.message));for(const k of await DB.keys('files','_tpl/')){await fileURL('_tpl',k.slice(5))}},isAndroid,version:VERSION};
 })();

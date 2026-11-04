@@ -416,6 +416,58 @@ class MainActivity : Activity(), WebAppBridge.Host {
 
     override fun versionName(): String = BuildConfig.VERSION_NAME
 
+    override fun deviceInfo(): String = DeviceTools.deviceInfo(applicationContext, BuildConfig.VERSION_NAME)
+
+    override fun openWebViewUpdate(): Boolean {
+        val pkg = DeviceTools.webViewPackage(applicationContext).first
+        runOnUiThread {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (e: ActivityNotFoundException) {
+                openExternal("https://play.google.com/store/apps/details?id=$pkg")
+            }
+        }
+        return true
+    }
+
+    override fun shareText(title: String, text: String): Boolean {
+        runOnUiThread {
+            try {
+                val send = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, title)
+                    putExtra(Intent.EXTRA_TEXT, text)
+                }
+                startActivity(Intent.createChooser(send, title.ifBlank { getString(R.string.app_name) }))
+            } catch (e: Exception) {
+                toast(getString(R.string.toast_no_app))
+            }
+        }
+        return true
+    }
+
+    override fun saveTextFile(name: String, text: String): String =
+        try {
+            DeviceTools.saveTextFile(applicationContext, name, text)
+        } catch (e: Exception) {
+            Log.w(TAG, "Hisobot saqlanmadi", e)
+            ""
+        }
+
+    /** Bufer faqat UI oqimida va oyna faol bo'lganda o'qiladi (Android 10+ talabi). */
+    override fun licenseKeyFromClipboard(): String = onUiThreadBlocking("") {
+        if (hasWindowFocus()) DeviceTools.licenseKeyFromClipboard(this) else ""
+    }
+
+    override fun copyText(text: String): Boolean = onUiThreadBlocking(false) { DeviceTools.copyToClipboard(this, text) }
+
+    /** JS ko'prigi oqimidan UI oqimida qisqa amal bajarib natijani kutish (ko'pi bilan 1.5 s). */
+    private fun <T> onUiThreadBlocking(fallback: T, block: () -> T): T {
+        val task = java.util.concurrent.FutureTask { runCatching(block).getOrDefault(fallback) }
+        runOnUiThread(task)
+        return runCatching { task.get(1500, java.util.concurrent.TimeUnit.MILLISECONDS) }.getOrDefault(fallback)
+    }
+
     // ================================================================ yordamchilar
 
     private fun openExternal(url: String) {
