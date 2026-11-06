@@ -1,0 +1,47 @@
+name: Deploy engine to Hugging Face Space
+
+# One-tap deploy from a phone: GitHub -> Actions -> this workflow -> Run workflow.
+# Needs two repository secrets (Settings -> Secrets and variables -> Actions):
+#   HF_TOKEN        - Hugging Face token with Write access
+#   FLOWCRAFT_TOKEN - the password the app will use to talk to the engine
+on:
+  workflow_dispatch:
+    inputs:
+      space_name:
+        description: "Space name"
+        required: true
+        default: "flowcraft-engine"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check secrets
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          FLOWCRAFT_TOKEN: ${{ secrets.FLOWCRAFT_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then echo "::error::Add the HF_TOKEN repository secret (Hugging Face Write token)"; exit 1; fi
+          if [ ${#FLOWCRAFT_TOKEN} -lt 12 ]; then echo "::error::Add the FLOWCRAFT_TOKEN repository secret (at least 12 characters)"; exit 1; fi
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Assemble Space folder
+        run: ./flowcraft-pro-studio/deploy/hf-space/prepare.sh
+
+      - name: Create / update the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          FLOWCRAFT_TOKEN: ${{ secrets.FLOWCRAFT_TOKEN }}
+          SPACE_NAME: ${{ inputs.space_name }}
+        run: |
+          pip install --quiet "huggingface_hub>=0.30"
+          python flowcraft-pro-studio/deploy/hf-space/deploy.py
