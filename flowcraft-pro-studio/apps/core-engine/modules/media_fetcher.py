@@ -7,6 +7,8 @@ Stills (``CINEMATIC_IMAGE`` and the start frame of animated scenes):
 
 Clips (``ANIMATED_VIDEO``), always animated *from the scene's still* so the
 hook matches the look and characters of the rest of the film:
+    * ``hf_space`` - Wan 2.2 on Hugging Face ZeroGPU with the *user's own*
+                     free account (works from a phone, no GPU needed)
     * ``comfyui``  - local image-to-video (Wan 2.1/2.2, LTX-Video ...)
     * ``parallax`` - built-in 2.5D depth parallax + atmosphere; CPU-only,
                      unlimited, always available. Also the automatic fallback
@@ -31,6 +33,7 @@ from pydantic import BaseModel, Field
 
 from .comfyui_client import ComfyUIClient, ComfyUIError, frames_for
 from .depth import get_estimator
+from .hf_spaces import HFQuotaExceeded, HFSpaceError, HFSpaceVideo
 from .models import Project, RenderMode, Scene
 from .parallax_engine import render_parallax
 
@@ -46,7 +49,11 @@ DEFAULT_NEGATIVE = ("plastic skin, airbrushed, oversaturated, glowing, cgi rende
 
 class MediaSettings(BaseModel):
     image_backend: str = Field("manual", pattern=r"^(manual|comfyui|pollinations)$")
-    video_backend: str = Field("parallax", pattern=r"^(parallax|comfyui)$")
+    video_backend: str = Field("parallax", pattern=r"^(parallax|comfyui|hf_space)$")
+    hf_token: Optional[str] = None            # the user's own free HF "Read" token
+    hf_preset: str = "wan22_fast"
+    hf_space: Optional[str] = None            # override the preset's Space id / URL
+    hf_steps: int = Field(6, ge=2, le=12)
     comfyui_url: str = "http://127.0.0.1:8188"
     image_workflow: Optional[str] = None      # API-format workflow JSON with placeholders
     video_workflow: Optional[str] = None
@@ -67,11 +74,13 @@ class MediaReport:
     images: list[int] = field(default_factory=list)
     videos: list[int] = field(default_factory=list)
     parallax_fallbacks: list[int] = field(default_factory=list)
+    hf_quota_exhausted: bool = False
     skipped: list[int] = field(default_factory=list)
     errors: dict[int, str] = field(default_factory=dict)
 
     def as_dict(self) -> dict:
         return {"images": self.images, "videos": self.videos, "parallax_fallbacks": self.parallax_fallbacks,
+                "hf_quota_exhausted": self.hf_quota_exhausted,
                 "skipped": self.skipped, "errors": {str(k): v for k, v in self.errors.items()}}
 
 
@@ -125,6 +134,8 @@ class MediaFetcher:
         self._comfy: Optional[ComfyUIClient] = None
         self._poll: Optional[PollinationsImages] = None
         self._depth = None
+        self._hf: Optional[HFSpaceVideo] = None
+        self.hf_quota_exhausted = False
 
     @property
     def comfy(self) -> ComfyUIClient:
@@ -176,6 +187,21 @@ class MediaFetcher:
 
     def make_clip(self, project: Project, sc: Scene, still: Path, media: Path) -> tuple[Path, bool]:
         """Returns (path, used_fallback)."""
+        if self.s.video_backend == "hf_space" and not self.hf_quota_exhausted:
+            try:
+                if self._hf is None:
+                    self._hf = HFSpaceVideo(self.s.hf_token, self.s.hf_preset, self.s.hf_space, self.s.hf_steps)
+                prompt = f"{sc.motion_prompt}. {sc.scene_description}".strip(". ") or "subtle cinematic motion"
+                out = self._hf.generate(still, prompt, media / f"{sc.scene_id:03d}",
+                                        seconds=self._clip_seconds(sc), seed=2000 + sc.scene_id,
+                                        negative=self.s.negative_prompt + ", morphing, flicker, text")
+                return out, False
+            except HFQuotaExceeded as e:
+                # Stop calling HF for the rest of this batch; quota refills daily.
+                self.hf_quota_exhausted = True
+                log.warning("HF ZeroGPU quota exhausted (%s); remaining clips use parallax", e)
+            except HFSpaceError as e:
+                log.warning("Scene %d: HF Space failed (%s); using parallax", sc.scene_id, e)
         if self.s.video_backend == "comfyui":
             try:
                 if not self.s.video_workflow:
@@ -195,7 +221,7 @@ class MediaFetcher:
                 return out, False
             except ComfyUIError as e:
                 log.warning("Scene %d: ComfyUI video failed (%s); using parallax", sc.scene_id, e)
-        return self.make_parallax(project, sc, still, media), self.s.video_backend == "comfyui"
+        return self.make_parallax(project, sc, still, media), self.s.video_backend in ("comfyui", "hf_space")
 
     # ---- orchestration ----------------------------------------------------- #
     def generate(self, project: Project, project_dir: Path, *, scene_ids: Optional[set[int]] = None,
@@ -252,5 +278,6 @@ class MediaFetcher:
                     report.errors[sc.scene_id] = f"video: {e}"
                 done += 1
                 progress(done / steps, f"Clip {stem} ({self.s.video_backend})")
+        report.hf_quota_exhausted = self.hf_quota_exhausted
         progress(1.0, "Media generation finished")
         return report

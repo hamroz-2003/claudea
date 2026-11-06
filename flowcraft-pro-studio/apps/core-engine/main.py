@@ -286,8 +286,9 @@ def media_settings() -> MediaSettings:
 @app.get("/settings/media", dependencies=auth)
 def get_media_settings() -> dict:
     data = media_settings().model_dump()
-    if data.get("pollinations_token"):
-        data["pollinations_token"] = "••••" + data["pollinations_token"][-4:]
+    for key in ("pollinations_token", "hf_token"):
+        if data.get(key):
+            data[key] = "••••" + data[key][-4:]
     return data
 
 
@@ -295,8 +296,9 @@ def get_media_settings() -> dict:
 def put_media_settings(body: MediaSettings) -> dict:
     old = state.get_setting("media", {}) or {}
     data = body.model_dump()
-    if (data.get("pollinations_token") or "").startswith("••••"):
-        data["pollinations_token"] = old.get("pollinations_token")
+    for key in ("pollinations_token", "hf_token"):
+        if (data.get(key) or "").startswith("••••"):
+            data[key] = old.get(key)
     for key in ("image_workflow", "video_workflow"):
         if data.get(key) and not Path(data[key]).is_file():
             raise HTTPException(400, f"{key}: file not found")

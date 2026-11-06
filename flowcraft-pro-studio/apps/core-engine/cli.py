@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     g = sub.add_parser("generate", help="free stills + hook clips (parallax / ComfyUI / Pollinations)")
     g.add_argument("project_id")
     g.add_argument("--images", choices=["manual", "comfyui", "pollinations"])
-    g.add_argument("--videos", choices=["parallax", "comfyui"])
+    g.add_argument("--videos", choices=["parallax", "comfyui", "hf_space"])
     g.add_argument("--scenes", help="comma-separated scene ids")
     g.add_argument("--only", choices=["images", "videos"])
     g.add_argument("--overwrite", action="store_true")
@@ -119,6 +119,8 @@ def main(argv: list[str] | None = None) -> int:
             cfg = MediaSettings(**data)
             state.set_setting("media", cfg.model_dump())
             for k, v in cfg.model_dump().items():
+                if k.endswith("token") and v:
+                    v = "••••" + v[-4:]
                 print(f"{k} = {v}")
         else:
             if args.images:
@@ -132,6 +134,8 @@ def main(argv: list[str] | None = None) -> int:
                                        progress=_progress)
             print(f"stills: {len(res['images'])}  clips: {len(res['videos'])}  "
                   f"parallax fallbacks: {len(res['parallax_fallbacks'])}  missing: {res['missing']}")
+            if res.get("hf_quota_exhausted"):
+                print("! Hugging Face free GPU quota is used up for today; the rest were made with parallax.")
             for sid, err in res["errors"].items():
                 print(f"! scene {sid}: {err}")
     elif args.cmd == "render":

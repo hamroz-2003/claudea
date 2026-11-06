@@ -7,6 +7,7 @@ numpy>=1.26
 edge-tts>=7.0            # free neural TTS (uz-UZ-SardorNeural / MadinaNeural, ru, en, tr ...)
 pillow>=10               # image loading for the parallax engine
 onnxruntime>=1.17        # Depth-Anything-V2 depth maps for 2.5D parallax (CPU)
+gradio_client>=1.3       # Hugging Face Spaces (ZeroGPU) image-to-video
 
 # Imported-narration alignment (optional, ~1.5 GB model download on first use)
 faster-whisper>=1.0
