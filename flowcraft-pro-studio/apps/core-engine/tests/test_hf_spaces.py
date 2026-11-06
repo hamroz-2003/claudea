@@ -13,8 +13,8 @@ class FakeClient:
     calls = []
     mode = "ok"
 
-    def __init__(self, src, hf_token=None, **kw):
-        self.src, self.token = src, hf_token
+    def __init__(self, src, token=None, verbose=True, **kw):
+        self.src, self.token = src, token
 
     def predict(self, *args, api_name=None):
         FakeClient.calls.append((self.src, self.token, api_name, args))

@@ -84,11 +84,16 @@ class HFSpaceVideo:
         if self._client is None:
             try:
                 if self._factory is not None:
-                    self._client = self._factory(space_url(self.space), hf_token=self.token)
+                    self._client = self._factory(space_url(self.space), token=self.token)
                 else:
+                    import inspect
+
                     from gradio_client import Client
 
-                    self._client = Client(space_url(self.space), hf_token=self.token, verbose=False)
+                    # gradio_client 2.x calls it `token`, 1.x `hf_token`.
+                    params = inspect.signature(Client.__init__).parameters
+                    kw = "token" if "token" in params else "hf_token"
+                    self._client = Client(space_url(self.space), verbose=False, **{kw: self.token})
             except Exception as e:
                 raise HFSpaceError(f"Cannot reach Space {self.space}: {e}") from e
         return self._client
