@@ -1,0 +1,22 @@
+{
+  "name": "flowcraft-studio-android",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Android shell for the FlowCraft Studio web UI (Capacitor).",
+  "scripts": {
+    "copy-web": "node scripts/copy-web.mjs",
+    "sync": "npm run copy-web && npx cap sync android && node scripts/apply-branding.mjs",
+    "apk:debug": "npm run sync && cd android && ./gradlew assembleDebug",
+    "apk:release": "npm run sync && cd android && ./gradlew assembleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/core": "8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

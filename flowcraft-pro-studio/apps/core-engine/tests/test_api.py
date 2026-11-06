@@ -54,3 +54,11 @@ def test_media_settings_and_comfyui_status(tmp_path):
     assert r.status_code == 200
     assert client.get("/media/comfyui/status", headers=H).json()["online"] is False
     client.put("/settings/media", headers=H, json={})
+
+
+def test_ui_is_served_and_query_token_works():
+    r = client.get("/", follow_redirects=False)
+    assert r.status_code in (302, 307) and r.headers["location"] == "/ui/"
+    assert "FlowCraft" in client.get("/ui/").text
+    assert client.get(f"/voices?token={main.TOKEN}").json()["uz"][0]["id"].startswith("uz-UZ")
+    assert client.get("/voices?token=wrong").status_code == 401

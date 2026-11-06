@@ -10,7 +10,7 @@ chapters. Everything runs on the user's machine at $0 recurring cost.
 | 1 | Core engine, script parser, prompt director, voice aligner | **done** |
 | 2 | FFmpeg composer (picture, transitions, subtitles, audio mastering) | **done** |
 | 3 | Free media generation (2.5D parallax, ComfyUI, Pollinations) | **done** (replaces the Flow bridge) |
-| 4 | Electron + React desktop UI, installers | not started |
+| 4 | Mobile + desktop UI (PWA), Android APK, cloud engine on HF Spaces | **done** |
 
 ## Quick start
 
@@ -44,7 +44,22 @@ python cli.py render amir-temur-askari
 
 Projects live in `~/.flowcraft-pro-studio/projects/` (override with `FLOWCRAFT_DATA`).
 
-Server mode for the desktop UI: `python main.py` serves `http://127.0.0.1:4100` (see API below).
+Server mode: `python main.py` serves the API **and the studio UI** at `http://127.0.0.1:4100`.
+`python main.py --lan` also listens on the local network and prints the address and token for
+the phone app. End-user guide (Uzbek): [`docs/QOLLANMA.md`](docs/QOLLANMA.md).
+
+## Apps: phone and computer
+
+| Piece | Path | What it is |
+|---|---|---|
+| Studio UI | `apps/web-ui/` | Mobile-first, no build step. The engine serves it at `/ui/`, and it installs as a PWA. Uzbek and English. |
+| Android app | `apps/android/` | Capacitor 8 shell around the same UI. GitHub Actions (`.github/workflows/android-apk.yml`) builds `app-debug.apk` on every change. |
+| Cloud engine | `deploy/hf-space/` | Dockerfile plus Space card. `./deploy/hf-space/prepare.sh` assembles a folder to push to a free "CPU basic" Space. Users duplicate it and set the `FLOWCRAFT_TOKEN` secret. |
+
+The heavy work (rendering, depth, TTS alignment) always runs on an engine: the user's computer,
+or their own free Space. Phones only drive it. A signed release APK is built when the repository
+has these secrets: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`,
+`ANDROID_KEY_PASSWORD`.
 
 ### Script format
 
@@ -200,7 +215,7 @@ service.
 ## Tests
 
 ```bash
-cd apps/core-engine && python -m pytest -q      # 39 tests, ~35 s, includes real ffmpeg renders
+cd apps/core-engine && python -m pytest -q      # 44 tests, ~35 s, includes real ffmpeg renders
 ```
 
 ## Notes and limits

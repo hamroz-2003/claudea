@@ -33,12 +33,14 @@ from fastapi import (
     Header,
     HTTPException,
     Query,
+    Request,
     UploadFile,
     WebSocket,
     WebSocketDisconnect,
 )
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, PlainTextResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from config import ASSETS_DIR, EngineSettings, StateStore
@@ -50,7 +52,7 @@ from modules.comfyui_client import ComfyUIClient, ComfyUIError
 from modules.models import CameraMotion, Character, RenderMode, RenderSettings, Transition
 from modules.subtitles import youtube_chapters
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 log = logging.getLogger("flowcraft.engine")
 
 settings = EngineSettings()
@@ -60,6 +62,9 @@ store = pipeline.ProjectStore(settings.projects_dir)
 
 
 def _load_token() -> str:
+    env = os.environ.get("FLOWCRAFT_TOKEN", "").strip()
+    if env:                       # cloud deploys (HF Space secret)
+        return env
     path = settings.data_dir / "engine.token"
     if path.exists():
         return path.read_text().strip()
@@ -76,10 +81,12 @@ TOKEN = _load_token()
 AUTH_DISABLED = os.environ.get("FLOWCRAFT_NO_AUTH") == "1"
 
 
-def require_token(x_flowcraft_token: Optional[str] = Header(default=None)) -> None:
+def require_token(request: Request, x_flowcraft_token: Optional[str] = Header(default=None)) -> None:
+    """Header for API calls; ``?token=`` for <img>/<video>/download links."""
     if AUTH_DISABLED:
         return
-    if not x_flowcraft_token or not secrets.compare_digest(x_flowcraft_token, TOKEN):
+    tok = x_flowcraft_token or request.query_params.get("token") or ""
+    if not tok or not secrets.compare_digest(tok, TOKEN):
         raise HTTPException(401, "Missing or invalid X-FlowCraft-Token")
 
 
@@ -162,7 +169,10 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="FlowCraft Pro Studio Engine", version=VERSION, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^(app://.*|file://.*|null|http://(127\.0\.0\.1|localhost)(:\d+)?)$",
+    # Auth is a bearer-style header token, never a cookie, so a foreign page
+    # cannot ride on the user's session; any origin (Android app at
+    # https://localhost, LAN browsers, the HF Space page) may call the API.
+    allow_origins=["*"],
     allow_methods=["*"], allow_headers=["*"],
 )
 auth = [Depends(require_token)]
@@ -521,6 +531,51 @@ def project_file(project_id: str, rel_path: str) -> FileResponse:
     return FileResponse(target)
 
 
+VOICES = {
+    "uz": [("uz-UZ-SardorNeural", "Sardor"), ("uz-UZ-MadinaNeural", "Madina")],
+    "ru": [("ru-RU-DmitryNeural", "Dmitry"), ("ru-RU-SvetlanaNeural", "Svetlana")],
+    "en": [("en-US-AndrewMultilingualNeural", "Andrew"), ("en-US-AvaMultilingualNeural", "Ava"),
+           ("en-GB-RyanNeural", "Ryan (UK)")],
+    "tr": [("tr-TR-AhmetNeural", "Ahmet"), ("tr-TR-EmelNeural", "Emel")],
+    "kk": [("kk-KZ-DauletNeural", "Daulet"), ("kk-KZ-AigulNeural", "Aigul")],
+}
+
+
+@app.get("/voices", dependencies=auth)
+def voices() -> dict:
+    return {lang: [{"id": v, "name": n} for v, n in items] for lang, items in VOICES.items()}
+
+
+@app.delete("/projects/{project_id}", dependencies=auth)
+def delete_project(project_id: str) -> dict:
+    with store.lock(project_id):
+        _project_or_404(project_id)
+        shutil.rmtree(store.dir(project_id))
+    return {"ok": True}
+
+
+@app.get("/projects/{project_id}/media", dependencies=auth)
+def media_files(project_id: str) -> dict:
+    """Which still / clip exists for each scene (drives storyboard thumbnails)."""
+    p = _project_or_404(project_id)
+    media = store.dir(project_id) / "media"
+    out: dict[str, dict] = {}
+    for sc in p.scenes:
+        stem = f"{sc.scene_id:03d}"
+        entry: dict[str, Any] = {}
+        for f in sorted(media.glob(f"{stem}.*")):
+            ext = f.suffix.lower()
+            if ext in pipeline.IMAGE_EXTS:
+                entry["image"] = f"media/{f.name}"
+            elif ext in pipeline.VIDEO_EXTS:
+                entry["video"] = f"media/{f.name}"
+            entry["mtime"] = max(entry.get("mtime", 0), int(f.stat().st_mtime))
+        out[str(sc.scene_id)] = entry
+    exports = store.dir(project_id) / "export"
+    files = sorted(f.name for f in exports.glob("*.mp4")) if exports.exists() else []
+    return {"scenes": out, "exports": [f"export/{n}" for n in files if ".tmp." not in n]}
+
+
 @app.get("/jobs", dependencies=auth)
 def jobs(project_id: Optional[str] = None) -> list[dict]:
     return state.list_jobs(project_id)
@@ -553,12 +608,49 @@ async def ws(websocket: WebSocket, token: str = Query(default="")) -> None:
         hub.clients.discard(websocket)
 
 
+UI_DIR = Path(os.environ.get("FLOWCRAFT_UI", Path(__file__).resolve().parent.parent / "web-ui"))
+if UI_DIR.is_dir():
+    app.mount("/ui", StaticFiles(directory=UI_DIR, html=True), name="ui")
+
+    @app.get("/", include_in_schema=False)
+    def root() -> RedirectResponse:
+        return RedirectResponse("/ui/")
+
+
+def _lan_addresses() -> list[str]:
+    import socket
+
+    addrs = set()
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("10.255.255.255", 1))
+        addrs.add(s.getsockname()[0])
+        s.close()
+    except OSError:
+        pass
+    return sorted(a for a in addrs if not a.startswith("127."))
+
+
 def main() -> None:
+    import argparse
+
     import uvicorn
 
+    ap = argparse.ArgumentParser(description="FlowCraft Pro Studio engine")
+    ap.add_argument("--lan", action="store_true",
+                    help="listen on the local network so the phone app can connect")
+    ap.add_argument("--port", type=int, default=settings.port)
+    args = ap.parse_args()
+    host = "0.0.0.0" if args.lan else settings.host
     logging.basicConfig(level=os.environ.get("FLOWCRAFT_LOG", "INFO"),
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    uvicorn.run(app, host=settings.host, port=settings.port, log_level="warning")
+    print(f"\nFlowCraft engine {VERSION}")
+    urls = [f"http://{a}:{args.port}" for a in _lan_addresses()] if args.lan else []
+    urls.insert(0, f"http://127.0.0.1:{args.port}")
+    for u in urls:
+        print(f"  Open / connect app:  {u}")
+    print(f"  Token:               {TOKEN}\n")
+    uvicorn.run(app, host=host, port=args.port, log_level="warning")
 
 
 if __name__ == "__main__":
