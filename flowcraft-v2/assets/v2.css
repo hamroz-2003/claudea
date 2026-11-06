@@ -1,0 +1,12 @@
+/* FlowCraft V2: jang/qo'rquv sahnalari uchun yengil kamera silkinishi (preview) */
+#bgl.mo-shake{animation:kbShake .9s linear infinite both;transform-origin:50% 50%}
+@keyframes kbShake{
+  0%{transform:scale(1.06) translate(0,0)}
+  20%{transform:scale(1.06) translate(-.35%,.2%)}
+  40%{transform:scale(1.06) translate(.3%,-.25%)}
+  60%{transform:scale(1.06) translate(-.2%,-.15%)}
+  80%{transform:scale(1.06) translate(.25%,.3%)}
+  100%{transform:scale(1.06) translate(0,0)}
+}
+/* hook kadr belgisi (vaqt chizig'ida) */
+.clip.hook::after{content:"";position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#E0582A}
