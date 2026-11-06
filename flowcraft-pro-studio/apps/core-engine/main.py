@@ -45,6 +45,8 @@ from config import ASSETS_DIR, EngineSettings, StateStore
 from modules import pipeline
 from modules.ffmpeg_utils import available_encoders, ffmpeg_bin
 from modules.llm import build_llm
+from modules.media_fetcher import MediaSettings
+from modules.comfyui_client import ComfyUIClient, ComfyUIError
 from modules.models import CameraMotion, Character, RenderMode, RenderSettings, Transition
 from modules.subtitles import youtube_chapters
 
@@ -210,6 +212,13 @@ class PromptJob(BaseModel):
     scene_ids: Optional[list[int]] = None
 
 
+class MediaJob(BaseModel):
+    scene_ids: Optional[list[int]] = None
+    images: bool = True
+    videos: bool = True
+    overwrite: bool = False
+
+
 class RenderJob(BaseModel):
     preview: bool = False
 
@@ -270,6 +279,42 @@ def put_llm(body: LLMSettings) -> dict:
     return {"ok": True}
 
 
+def media_settings() -> MediaSettings:
+    return MediaSettings(**(state.get_setting("media", {}) or {}))
+
+
+@app.get("/settings/media", dependencies=auth)
+def get_media_settings() -> dict:
+    data = media_settings().model_dump()
+    if data.get("pollinations_token"):
+        data["pollinations_token"] = "••••" + data["pollinations_token"][-4:]
+    return data
+
+
+@app.put("/settings/media", dependencies=auth)
+def put_media_settings(body: MediaSettings) -> dict:
+    old = state.get_setting("media", {}) or {}
+    data = body.model_dump()
+    if (data.get("pollinations_token") or "").startswith("••••"):
+        data["pollinations_token"] = old.get("pollinations_token")
+    for key in ("image_workflow", "video_workflow"):
+        if data.get(key) and not Path(data[key]).is_file():
+            raise HTTPException(400, f"{key}: file not found")
+    state.set_setting("media", data)
+    return {"ok": True}
+
+
+@app.get("/media/comfyui/status", dependencies=auth)
+def comfyui_status() -> dict:
+    try:
+        stats = ComfyUIClient(media_settings().comfyui_url).ping()
+    except ComfyUIError as e:
+        return {"online": False, "error": str(e)}
+    devices = [{"name": d.get("name"), "vram_total": d.get("vram_total"), "vram_free": d.get("vram_free")}
+               for d in stats.get("devices", [])]
+    return {"online": True, "devices": devices}
+
+
 @app.get("/keys", dependencies=auth)
 def list_keys(service: Optional[str] = None) -> list[dict]:
     return state.list_keys(service)
@@ -323,6 +368,8 @@ def patch_project(project_id: str, body: ProjectPatch) -> dict:
             v = getattr(body, f)
             if v is not None:
                 setattr(p.bible, f, v)
+        if body.hook_video_count is not None:
+            pipeline.apply_hook_modes(p)
         if body.characters is not None:
             p.bible.characters = body.characters
         if body.render:
@@ -425,6 +472,18 @@ def scan_media(project_id: str) -> dict:
         missing = pipeline.attach_media(p, store.dir(project_id))
         store.save(p)
     return {"missing": missing, "attached": len(p.scenes) - len(missing)}
+
+
+@app.post("/projects/{project_id}/media/generate", dependencies=auth)
+def run_media(project_id: str, body: MediaJob) -> dict:
+    _project_or_404(project_id)
+    ms = media_settings()
+    ids = set(body.scene_ids) if body.scene_ids else None
+    return start_job("media", project_id,
+                     lambda prog: pipeline.stage_media(store, project_id, ms, settings.data_dir / "models",
+                                                       scene_ids=ids, images=body.images, videos=body.videos,
+                                                       overwrite=body.overwrite, progress=prog),
+                     heavy=True)
 
 
 @app.post("/projects/{project_id}/render", dependencies=auth)

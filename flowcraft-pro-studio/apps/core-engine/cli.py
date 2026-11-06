@@ -56,6 +56,15 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("project_id")
     m.add_argument("scene_id", type=int)
     m.add_argument("file", type=Path)
+    g = sub.add_parser("generate", help="free stills + hook clips (parallax / ComfyUI / Pollinations)")
+    g.add_argument("project_id")
+    g.add_argument("--images", choices=["manual", "comfyui", "pollinations"])
+    g.add_argument("--videos", choices=["parallax", "comfyui"])
+    g.add_argument("--scenes", help="comma-separated scene ids")
+    g.add_argument("--only", choices=["images", "videos"])
+    g.add_argument("--overwrite", action="store_true")
+    ms = sub.add_parser("media-settings", help="show or change media backends")
+    ms.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
     r = sub.add_parser("render")
     r.add_argument("project_id")
     r.add_argument("--preview", action="store_true")
@@ -96,6 +105,35 @@ def main(argv: list[str] | None = None) -> int:
         missing = pipeline.attach_media(p, store.dir(args.project_id))
         store.save(p)
         print(f"Missing media for scenes: {missing}" if missing else "All scenes have media")
+    elif args.cmd in ("generate", "media-settings"):
+        from modules.media_fetcher import MediaSettings
+
+        cfg = MediaSettings(**(state.get_setting("media", {}) or {}))
+        if args.cmd == "media-settings":
+            data = cfg.model_dump()
+            for kv in args.set:
+                k, _, v = kv.partition("=")
+                if k not in data:
+                    raise ValueError(f"Unknown setting {k}")
+                data[k] = v if v != "" else None
+            cfg = MediaSettings(**data)
+            state.set_setting("media", cfg.model_dump())
+            for k, v in cfg.model_dump().items():
+                print(f"{k} = {v}")
+        else:
+            if args.images:
+                cfg.image_backend = args.images
+            if args.videos:
+                cfg.video_backend = args.videos
+            ids = {int(x) for x in args.scenes.split(",")} if args.scenes else None
+            res = pipeline.stage_media(store, args.project_id, cfg, settings.data_dir / "models",
+                                       scene_ids=ids, images=args.only != "videos",
+                                       videos=args.only != "images", overwrite=args.overwrite,
+                                       progress=_progress)
+            print(f"stills: {len(res['images'])}  clips: {len(res['videos'])}  "
+                  f"parallax fallbacks: {len(res['parallax_fallbacks'])}  missing: {res['missing']}")
+            for sid, err in res["errors"].items():
+                print(f"! scene {sid}: {err}")
     elif args.cmd == "render":
         p = pipeline.stage_render(store, args.project_id, ASSETS_DIR, preview=args.preview, progress=_progress)
         print(p.output_path if not args.preview else store.dir(args.project_id) / "export")

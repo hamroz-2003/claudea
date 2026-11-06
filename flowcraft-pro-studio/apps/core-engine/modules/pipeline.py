@@ -25,6 +25,7 @@ from typing import Callable, Optional
 
 from .human_composer import render_project
 from .llm import LLMClient
+from .media_fetcher import MediaFetcher, MediaSettings
 from .models import Chapter, Character, Project, RenderMode, RenderSettings, VisualBible
 from .prompt_director import PromptDirector
 from .script_parser import parse_script
@@ -40,6 +41,15 @@ def slugify(text: str) -> str:
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     text = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
     return text[:48] or "project"
+
+
+def apply_hook_modes(project: Project) -> None:
+    """First ``hook_video_count`` scenes (+ chapter openers if enabled) are animated."""
+    for i, sc in enumerate(project.scenes):
+        opener = (project.chapter_openers_animated and i > 0
+                  and project.scenes[i - 1].chapter_index != sc.chapter_index)
+        sc.render_mode = (RenderMode.ANIMATED_VIDEO if i < project.hook_video_count or opener
+                          else RenderMode.CINEMATIC_IMAGE)
 
 
 class ProjectStore:
@@ -108,6 +118,7 @@ class ProjectStore:
             scenes=parsed.scenes,
             render=RenderSettings(**(render or {})),
         )
+        apply_hook_modes(project)
         d = self.dir(pid)
         for sub in ("media", "audio", "render", "export"):
             (d / sub).mkdir(parents=True, exist_ok=True)
@@ -215,6 +226,29 @@ def import_scene_media(store: ProjectStore, project_id: str, scene_id: int, src:
         attach_media(project, d)
         store.save(project)
         return project
+
+
+def stage_media(store: ProjectStore, project_id: str, settings: MediaSettings, models_dir: Path, *,
+                scene_ids: Optional[set[int]] = None, images: bool = True, videos: bool = True,
+                overwrite: bool = False, progress: Optional[ProgressFn] = None) -> dict:
+    """Generate missing stills and hook clips with the free backends."""
+    project = store.load(project_id)       # read-only snapshot: generation can take long
+    d = store.dir(project_id)
+    report = MediaFetcher(settings, models_dir).generate(
+        project, d, scene_ids=scene_ids, images=images, videos=videos, overwrite=overwrite,
+        progress=progress)
+    with store.lock(project_id):
+        project = store.load(project_id)
+        missing = attach_media(project, d)
+        store.save(project)
+    result = report.as_dict()
+    result["missing"] = missing
+    (d / "render").mkdir(parents=True, exist_ok=True)
+    (d / "render" / "media_report.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    if report.errors and not (report.images or report.videos):
+        first = next(iter(report.errors.items()))
+        raise RuntimeError(f"Media generation failed for all scenes (scene {first[0]}: {first[1]})")
+    return result
 
 
 PREVIEW_OVERRIDES = {"width": 960, "height": 540, "fps": 30, "supersample": 1, "grain_strength": 5}

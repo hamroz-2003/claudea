@@ -40,3 +40,17 @@ def test_project_lifecycle_with_offline_prompts():
 def test_websocket_requires_token():
     with client.websocket_connect(f"/ws?token={main.TOKEN}") as ws:
         assert ws.receive_json()["type"] == "hello"
+
+
+def test_media_settings_and_comfyui_status(tmp_path):
+    assert client.get("/settings/media", headers=H).json()["video_backend"] == "parallax"
+    r = client.put("/settings/media", headers=H, json={"video_backend": "comfyui",
+                                                        "video_workflow": str(tmp_path / "missing.json")})
+    assert r.status_code == 400
+    wf = tmp_path / "wf.json"
+    wf.write_text('{"1": {"inputs": {"text": "{{PROMPT}}"}}}')
+    r = client.put("/settings/media", headers=H, json={"video_backend": "comfyui", "video_workflow": str(wf),
+                                                        "comfyui_url": "http://127.0.0.1:9"})
+    assert r.status_code == 200
+    assert client.get("/media/comfyui/status", headers=H).json()["online"] is False
+    client.put("/settings/media", headers=H, json={})

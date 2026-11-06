@@ -9,7 +9,7 @@ chapters. Everything runs on the user's machine at $0 recurring cost.
 |---|---|---|
 | 1 | Core engine, script parser, prompt director, voice aligner | **done** |
 | 2 | FFmpeg composer (picture, transitions, subtitles, audio mastering) | **done** |
-| 3 | Flow bridge + Chrome extension | not started (see notes below) |
+| 3 | Free media generation (2.5D parallax, ComfyUI, Pollinations) | **done** (replaces the Flow bridge) |
 | 4 | Electron + React desktop UI, installers | not started |
 
 ## Quick start
@@ -33,8 +33,9 @@ python cli.py tts amir-temur-askari
 #    ... or align a narrator's single recording to the script
 python cli.py align amir-temur-askari narration.mp3
 
-# 4. put visuals in projects/<id>/media as 001.png, 002.png ... (001.mp4 for animated scenes)
-python cli.py scan amir-temur-askari
+# 4. visuals: generate them for free, or drop your own files into projects/<id>/media
+#    (001.png, 002.png ...; 001.mp4 for animated scenes), then `python cli.py scan <id>`
+python cli.py generate amir-temur-askari --images pollinations --videos parallax
 
 # 5. render: quick 540p preview (placeholders for missing media), then the master
 python cli.py render amir-temur-askari --preview
@@ -129,6 +130,44 @@ words split at the comma closest to their middle. Pauses are 180 ms between sent
 - **Encoders.** NVENC, VideoToolbox, AMF and QSV are each tested with a real encode before use;
   libx264 is the fallback.
 
+### Free media generation (`modules/media_fetcher.py`)
+Flow automation was replaced by backends that cost nothing and need no subscription,
+CAPTCHA or account juggling:
+
+| Need | Backend | Cost / requirements |
+|---|---|---|
+| Hook clips (`ANIMATED_VIDEO`) | **`parallax`** (default): built-in 2.5D engine | $0, CPU only, unlimited |
+| | **`comfyui`**: Wan 2.1/2.2, LTX-Video ... image-to-video | $0, the user's NVIDIA GPU (8 GB+ for small models) |
+| Stills (all scenes) | **`comfyui`**: FLUX.1 schnell, SDXL ... | $0, the user's GPU |
+| | **`pollinations`**: free hosted text-to-image | $0, no account (a free token raises limits) |
+| | **`manual`**: any files dropped into `media/` | - |
+
+Clips are always animated *from the scene's own still*, so the hook keeps the characters and
+look of the rest of the film. If ComfyUI is down or a generation fails, the scene falls back to
+parallax automatically, and the report says so.
+
+**2.5D parallax engine** (`modules/parallax_engine.py`, `modules/depth.py`):
+- **Depth.** Depth-Anything-V2-Small (ONNX, Apache-2.0) runs on CPU and downloads once
+  (~100 MB). Offline, a smooth ground-plane fallback is used. It still gives clean perspective
+  parallax, but without separating individual objects.
+- **Camera.** The camera dollies, trucks or cranes according to the scene's planned move.
+  Near pixels magnify and slide more than far ones. The depth map is edge-dilated so
+  silhouettes don't tear.
+- **Atmosphere.** Embers, dust, snow and rain particles are layered by depth and ride the same
+  camera move; fog is a drifting haze.
+- **Speed.** Frames render in parallel processes: about 130 ms per 1080p frame on 4 cores,
+  i.e. about 30 s for an 8 s / 30 fps clip.
+
+**ComfyUI workflows.** Build any workflow in ComfyUI and export it with *Export (API)*. Then
+put placeholders into its fields: `{{PROMPT}}`, `{{NEGATIVE}}`, `{{SEED}}`, `{{WIDTH}}`,
+`{{HEIGHT}}`, `{{FRAMES}}`, `{{FPS}}`, `{{IMAGE}}` (start frame), `{{PREFIX}}`. Point the
+engine at the file:
+
+```bash
+python cli.py media-settings --set video_backend=comfyui --set video_workflow=/path/wan_i2v_api.json \
+  --set video_fps=16 --set frame_step=4        # Wan: 16 fps, 4n+1 frames; LTX: 24 fps, 8n+1
+```
+
 ## Engine API (127.0.0.1:4100)
 
 Every route except `/health` requires the header `X-FlowCraft-Token: <data_dir>/engine.token`
@@ -150,6 +189,9 @@ service.
 | POST | `/projects/{id}/scenes/{n}/voice` + `/voice/scenes` | per-sentence human takes |
 | POST | `/projects/{id}/scenes/{n}/media` | upload / swap a scene visual |
 | POST | `/projects/{id}/media/scan` | attach `media/NNN.*` files |
+| POST | `/projects/{id}/media/generate` | job: free stills + hook clips (`scene_ids`, `images`, `videos`, `overwrite`) |
+| GET/PUT | `/settings/media` | media backends, ComfyUI URL and workflows |
+| GET | `/media/comfyui/status` | is ComfyUI running, GPU / VRAM |
 | POST | `/projects/{id}/render` | job: render (`{"preview": true}` for 540p) |
 | GET | `/projects/{id}/youtube-chapters` | description-ready chapter list |
 | GET | `/jobs`, `/jobs/{id}` | job status |
@@ -158,7 +200,7 @@ service.
 ## Tests
 
 ```bash
-cd apps/core-engine && python -m pytest -q      # 24 tests, ~25 s, includes real ffmpeg renders
+cd apps/core-engine && python -m pytest -q      # 39 tests, ~35 s, includes real ffmpeg renders
 ```
 
 ## Notes and limits
@@ -171,9 +213,11 @@ cd apps/core-engine && python -m pytest -q      # 24 tests, ~25 s, includes real
 - **Fonts and overlays are not bundled.** Put OFL fonts (Montserrat, Inter, Noto Sans) in
   `assets/fonts/` and atmosphere loops in `assets/overlays/`. Without them, libass falls back
   to system fonts and no overlay is applied.
-- **Phase 3 scope.** The bridge will automate the user's own signed-in Flow session within
-  normal limits. It will not include reCAPTCHA token harvesting or rotating several Google
-  accounts to multiply free quotas: both break Google's terms and put buyers' accounts at risk.
-  The daily free-credit figures in the original brief have not been verified and change often.
-  `prompts.json` is already the hand-off format, and it also works by hand (paste prompts into
-  Flow, save results as `NNN.png` / `NNN.mp4`).
+- **Untested from this sandbox.** Pollinations and the Depth-Anything model download were
+  blocked by this sandbox's network. Both are covered by fallbacks (manual stills, heuristic
+  depth), and the Pollinations base URL is configurable in case the service changes it.
+  ComfyUI was tested against a fake server that implements its HTTP API, not a real GPU
+  install.
+- **Quality, honestly.** 2.5D parallax is a camera move through a still image. It cannot
+  make people walk or flags wave; that needs a generative model (ComfyUI with Wan or LTX).
+  The parallax default exists because it works on any PC at zero cost.
