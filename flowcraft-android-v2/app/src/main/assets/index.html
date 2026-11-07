@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e0b08">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon.png">
+<title>FlowCraft Studio</title>
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="real.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="mobile.css">
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="og" gradientUnits="userSpaceOnUse" x1="10" y1="10" x2="54" y2="54"><stop offset="0" stop-color="#E9C27C"/><stop offset="1" stop-color="#B07A2A"/></linearGradient>
+    <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF4DA"/><stop offset="1" stop-color="#F2D193"/></linearGradient>
+  </defs>
+</svg>
+<div class="atmo"><div class="glow g1"></div><div class="glow g2"></div><div class="grain"></div></div>
+
+<nav class="side" id="side" aria-label="Asosiy menyu">
+  <div class="side-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,180,140,.25)" stroke-width="2"/><path d="M22 46V24c0-4 2.5-6 6.5-6H44M22 33.5h14" fill="none" stroke="#D6A049" stroke-width="6" stroke-linecap="round"/><circle cx="46" cy="34" r="4" fill="#D6A049"/></svg></div>
+  <button class="sbtn" type="button" data-screen="s-home" data-nav="s-home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Bosh sahifa</span></button>
+  <button class="sbtn" type="button" data-screen="s-projects" data-nav="s-projects"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Loyihalar</span></button>
+  <button class="sbtn" type="button" data-screen="s-templates" data-nav="s-templates"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Shablonlar</span></button>
+  <button class="sbtn" type="button" data-screen="s-settings" data-nav="s-settings"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>Sozlamalar</span></button>
+  <div class="side-sp"></div>
+  <button class="sbtn help" type="button" id="helpBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg><span>Yordam</span></button>
+</nav>
+
+<!-- SPLASH -->
+<section class="splash" id="splash" aria-label="FlowCraft yuklanmoqda">
+  <div class="splash-in">
+    <div class="mark"><div class="halo"></div>
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect class="frame" x="2" y="2" width="60" height="60" rx="18"/><path class="f f1" d="M22 46V24c0-4 2.5-6 6.5-6H44"/><path class="f f2" d="M22 33.5h14"/><circle class="dot" cx="46" cy="34" r="3.6"/></svg>
+    </div>
+    <div class="word" id="word" aria-label="FlowCraft"></div>
+    <div class="tag">Video Studio</div>
+    <div class="load"><div class="bar"><i></i></div><div class="status" id="status">Ishga tushmoqda</div></div>
+  </div>
+  <button class="skip" id="skip" type="button">O'tkazib yuborish</button>
+</section>
+
+<!-- ACTIVATION -->
+<section class="screen" id="s-act"><div class="center"><div class="act">
+  <div class="eyebrow rv" style="--i:0">Faollashtirish</div>
+  <h1 class="big rv" style="--i:1">Kalitni kiriting</h1>
+  <div class="panel rv" style="--i:2">
+    <div class="label">Kompyuter ID</div>
+    <div class="idbox" style="margin-top:8px"><code id="devId">…</code><button class="pill sm" type="button" id="copyId">Nusxa</button></div>
+    <p class="note" style="margin-top:8px">Protsessor raqami: <span class="num" id="cpuId" style="color:var(--ink-2)">…</span></p>
+    <p class="note" style="margin-top:10px">ID'ni botga yuboring, bot kalit beradi. Kalit faqat shu kompyuterda ishlaydi.</p>
+    <div class="row" style="margin-top:12px"><a class="pill" id="botLink" href="https://t.me/flowcraftkalit_bot" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24"><path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/></svg>@flowcraftkalit_bot</a></div>
+  </div>
+  <div class="field rv" style="--i:3"><label class="label" for="key">Kalit</label><textarea class="input ta" id="key" placeholder="FC3-…" style="min-height:90px;font-family:var(--num);letter-spacing:.03em"></textarea></div>
+  <p class="note err" id="keyErr" hidden></p>
+  <div class="rv" style="--i:4"><button class="primary" id="activate" type="button">Faollashtirish <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></div>
+</div></div></section>
+
+<!-- HOME -->
+<section class="screen" id="s-home">
+  <header class="top rv" style="--i:0"><span class="eyebrow">Bosh sahifa</span>
+    <div class="actions"><span class="chip hide-sm" id="aiChip"><i class="dot"></i>AI ulanmagan</span><span class="chip" id="licChip">Litsenziya</span></div>
+  </header>
+  <div class="wrap" style="padding-top:24px">
+    <div id="ffBanner" class="panel ffb" hidden></div>
+    <div class="home-hero">
+      <h1 class="big rv" style="--i:1">Salom! Yangi video boshlaymizmi?</h1>
+      <p class="lede rv" style="--i:2">Ikki yo'l bor: hammasini shu yerda qilish yoki boshqa joyda tayyorlaganlaringizni olib kelib, faqat montaj qilish. Ish har qadamda saqlanadi.</p>
+      <div class="homeopts rv" style="--i:3">
+        <button class="hop" id="newVideo" type="button"><span class="hi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span><b>Noldan boshlash</b><span>Mavzu yozasiz, ssenariy va promptlarni dastur tayyorlaydi. Istalgan AI xizmati bilan.</span></span></button>
+        <button class="hop" type="button" id="newImport"><span class="hi alt"><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span><span><b>Tayyor materiallarim bor</b><span>ChatGPT, Claude yoki boshqa joyda qilgan ssenariy, rasm va ovozni olib keling.</span></span></button>
+      </div>
+      <div class="row rv" style="--i:3"><button class="pill sm" type="button" data-screen="s-tpl">+ O'z shabloningizni qo'shish</button></div>
+    </div>
+    <section class="rv" style="--i:4">
+      <div class="sec-h"><h2>Shablonlar</h2><button class="pill sm" type="button" data-screen="s-templates">Hammasini ko'rish</button></div>
+      <div class="tgrid" id="tplHome"></div>
+    </section>
+    <section class="rv" style="--i:5">
+      <div class="sec-h"><h2>Oxirgi loyihalar</h2><button class="pill sm" type="button" data-screen="s-projects">Hammasi</button></div>
+      <div class="grid3" id="projHome"></div>
+    </section>
+  </div>
+</section>
+
+<section class="screen" id="s-templates">
+  <div class="wrap" style="gap:24px;padding-top:12px">
+    <div class="pfilter"><div><h1 class="big" style="font-size:clamp(28px,4vw,40px)">Shablonlar</h1><p class="lede" style="margin-top:8px">Ustiga olib boring, namuna jonlanadi. Bossangiz, yangi loyiha shu shablon bilan ochiladi.</p></div>
+      <div class="seg" id="tplFilter"><button class="pill on" type="button" data-tf="all">Hammasi</button><button class="pill" type="button" data-tf="long">Uzun video</button><button class="pill" type="button" data-tf="short">Shorts</button></div></div>
+    <div class="panel row between" style="gap:12px;flex-wrap:wrap"><div><h3>Shablon rasmlari</h3><p class="sub">Har shablonga o'z rasmini qo'yish mumkin. Rasmlarni shablon nomi bilan saqlang (masalan «Tarix.jpg», «Wojak Doomer.jpg») va hammasini birdan tanlang: dastur nomiga qarab joylaydi.</p></div><div class="row"><button class="pill sm" type="button" id="tplSamples">Flow uchun promptlar</button><button class="pill sm on" type="button" id="tplPut">Rasmlarni nomi bo'yicha qo'yish</button><input type="file" accept="image/*" multiple hidden id="tplFiles"></div></div>
+    <div class="tgrid" id="tplAll"></div>
+  </div>
+</section>
+
+<section class="screen" id="s-projects">
+  <div class="wrap" style="gap:24px;padding-top:12px">
+    <div class="pfilter"><h1 class="big" style="font-size:clamp(28px,4vw,40px)">Loyihalar</h1>
+      <div class="row"><input class="input sm" id="pSearch" style="width:220px" placeholder="Qidirish" aria-label="Loyiha qidirish"><button class="primary sm" type="button" id="newVideo2">Yangi video <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button></div></div>
+    <div class="seg" id="pFilter" style="align-self:flex-start"><button class="pill on" type="button" data-pf="all">Hammasi</button><button class="pill" type="button" data-pf="run">Jarayonda</button><button class="pill" type="button" data-pf="done">Tayyor</button></div>
+    <div class="grid3" id="projAll"></div>
+  </div>
+</section>
+
+<!-- IMPORT -->
+<section class="screen" id="s-import">
+  <div class="wrap" style="gap:22px;padding-top:12px;max-width:1000px">
+    <div><h1 class="big" style="font-size:clamp(28px,4vw,40px)">Tayyor materiallardan montaj</h1>
+      <p class="lede" style="margin-top:10px">Ssenariy, rasm yoki ovozni qaysi AI'da qilgan bo'lsangiz ham olib keling: ChatGPT, Claude, Gemini, DeepSeek, Midjourney, Flow, ElevenLabs yoki o'zingiz yozgan bo'lsangiz ham. Dastur hech qaysi xizmatga bog'lanmagan.</p></div>
+    <div class="field"><label class="label" for="impName">Loyiha nomi</label><input class="input" id="impName" placeholder="Masalan: Xitoyda bir kun"></div>
+    <div class="seg" id="impFmt" style="align-self:flex-start"><button class="pill on" type="button" data-f="long">Uzun video · 16:9</button><button class="pill" type="button" data-f="short">Shorts · 9:16</button></div>
+    <div class="imp" id="impBox"></div>
+    <div class="row"><button class="primary" type="button" id="impGo">Montajga o'tish <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><span class="note" id="impNote">Kamida rasmlar va ovoz kerak. Matn bo'lmasa, subtitrsiz yig'iladi.</span></div>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section class="screen" id="s-studio">
+  <header class="top">
+    <button class="brand" type="button" data-screen="s-home"><svg viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,180,140,.25)" stroke-width="2"/><path d="M22 46V24c0-4 2.5-6 6.5-6H44M22 33.5h14" fill="none" stroke="#D6A049" stroke-width="6" stroke-linecap="round"/><circle cx="46" cy="34" r="4" fill="#D6A049"/></svg><span class="hide-sm">FlowCraft</span></button>
+    <div class="actions"><input class="pname" id="projName" aria-label="Loyiha nomi" value="Yangi video"><span class="chip" id="fmtChip">16:9</span><button class="pill icon-btn" type="button" data-screen="s-settings" aria-label="Sozlamalar"><svg class="i" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+  </header>
+  <div class="studio">
+    <nav class="rail" id="rail" aria-label="Qadamlar"></nav>
+    <main class="work">
+      <div class="step-h"><div><div class="eyebrow" id="stEye">01 / 08</div><h1 id="stTitle"></h1><p id="stHint"></p></div><div id="stAside"></div></div>
+
+      <!-- 1 -->
+      <div class="pane" data-p="1">
+        <div class="seg" id="fmt"><button class="pill on" type="button" data-f="long">Uzun video · 16:9</button><button class="pill" type="button" data-f="short">Shorts · 9:16</button></div>
+        <div class="tgrid" id="tpl"></div>
+      </div>
+
+      <!-- 2 -->
+      <div class="pane" data-p="2">
+        <div class="field"><label class="label" for="topic">Mavzu</label><input class="input" id="topic" placeholder="Masalan: Xitoyda yashasam nima bo'lardi?"></div>
+        <div class="row"><button class="pill sm" id="ideasBtn" type="button">Mavzu g'oyalari</button><span class="note" id="ideasNote">Har bosganda boshqa g'oyalar chiqadi</span></div>
+        <div class="panel" id="ytPanel" style="margin-top:4px"><h3>YouTube videodan ilhomlanish</h3><p class="sub">Yoqqan videoning linkini qo'ying. AI videoni ko'rib, nima uchun ishlaganini ajratadi: hook, tuzilish, sur'at, ohang. Ssenariy shu usulda, lekin o'z so'zlari va o'z faktlari bilan yoziladi, nusxa olinmaydi.</p>
+          <div class="row" style="margin-top:12px;flex-wrap:nowrap"><input class="input sm" id="ytUrl" placeholder="https://www.youtube.com/watch?v=…" style="flex:1"><button class="pill sm on" type="button" id="ytGo">Videoni tahlil qilish</button><button class="pill sm" type="button" id="ytOff" hidden>Olib tashlash</button></div>
+          <div id="ytOut" style="margin-top:12px"></div>
+        </div>
+        <div class="row" id="ideas"></div>
+        <div class="panel" style="display:flex;flex-direction:column;gap:16px">
+          <div class="field"><span class="label" id="durLabel">Davomiylik</span><div class="row"><div class="seg" id="dur"></div><div class="custom"><input class="input" id="durCustom" placeholder="o'zim" inputmode="numeric" aria-label="O'z davomiyligingiz"><span class="note" id="durUnit">daqiqa</span></div></div></div>
+          <div class="field"><span class="label">Ssenariy tili</span><button class="pill" type="button" id="langBtn">Til tanlang</button><div class="seg" id="lang" hidden><button class="pill on" type="button" data-l="uz">O'zbek</button><button class="pill" type="button" data-l="uzc">Ўзбекча</button><button class="pill" type="button" data-l="ru">Русский</button><button class="pill" type="button" data-l="en">English</button><button class="pill" type="button" data-l="ar">العربية</button></div></div>
+          <div class="field"><span class="label">Ssenariy ohangi <small style="font-weight:500;opacity:.7">(ixtiyoriy)</small></span><div class="row" id="tones" style="gap:6px;flex-wrap:wrap"></div></div>
+          <div class="field"><span class="label">Faktlar</span><div class="toggle" style="padding:0"><span class="tw">Google Search bilan tekshirish<small>Faqat pullik Gemini kalitida ishlaydi. Bepul kalitda Google ruxsat bermaydi — dastur o'zi qidiruvsiz yozadi</small></span><span class="sw on" id="useSearch" role="switch" tabindex="0"></span></div></div>
+          <p class="note" id="est"></p>
+        </div>
+        <div class="panel"><h3>Rasm uslubi</h3><p class="sub">Rasmlar qanday chizilishini belgilaydi. Rasmlar shu uslubda chiziladi. Shablonning o'z uslubi yoki o'zingiznikini tanlang.</p><div class="styles" id="styles" style="margin-top:14px"></div></div>
+        <div class="panel">
+          <div class="row between"><h3>Reja</h3><div class="row" style="gap:6px"><span class="chip" id="planTpl"></span><button class="pill sm on" type="button" id="planBtn">Reja tuzish</button></div></div>
+          <p class="sub">Reja mavzuning o'zidan tuziladi. Shablon faqat ohang va rasm uslubini beradi. Bir xil mavzu yozilsa ham har safar boshqa burchakdan chiqadi, oldingi videolaringiz rejasi takrorlanmaydi.</p>
+          <div class="field" style="margin-top:12px"><span class="label">Hikoya burchagi</span><div class="angles seg sm2" id="angles"></div></div>
+          <div class="plan" id="plan"></div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="pane" data-p="3">
+        <div class="meter"><span class="num" id="wc" style="font-size:18px;min-width:130px">0</span><div class="track"><i id="wbar"></i></div><span class="note">so'z</span></div>
+        <div class="split"><div class="outline" id="outline"></div><div class="panel"><textarea class="script" id="script" spellcheck="false" placeholder="Ssenariy shu yerda paydo bo'ladi. O'zingiz yozsangiz yoki boshqa AI javobini qo'ysangiz ham bo'ladi."></textarea></div></div>
+        <div class="row"><button class="pill on" id="genBtn" type="button">Ssenariyni yozish</button><button class="pill" id="stopBtn" type="button" hidden>To'xtatish</button><button class="pill" id="regenBtn" type="button">Tanlangan bo'limni qayta yozish</button><button class="pill" id="chkBtn" type="button">Ssenariyni tekshirish</button><span class="note" id="frameNote"></span></div>
+        <div class="copyopt">
+          <div class="panel"><h3>Ssenariyni nusxalash</h3><p class="sub">Tayyor matnning o'zi. Ovoz yozish yoki boshqa joyda tahrirlash uchun.</p><div><button class="pill sm" type="button" id="copyScript">Matnni nusxalash</button></div></div>
+          <div class="panel"><h3>Boshqa AI'da yozdirish</h3><p class="sub">Shablon qoidalari, mavzu, davomiylik va til bitta so'rovga yig'iladi. ChatGPT, Claude, DeepSeek yoki istalgan AI'ga qo'yasiz, javobni yuqoridagi maydonga joylaysiz.</p><div class="row"><button class="pill sm" type="button" id="copyReq">So'rovni nusxalash</button></div></div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="pane" data-p="4"><div id="refPane" style="display:flex;flex-direction:column;gap:16px"></div></div>
+
+      <!-- 5 -->
+      <div class="pane" data-p="5">
+        <div class="row" id="pStats"></div>
+        <div class="panel"><h3>Rasmlarni qayerda yaratasiz?</h3>
+          <div class="src" id="src" style="margin-top:12px">
+            <button class="srcc on" type="button" data-src="flow"><b>Flow + extension</b><span>Bloklarni extensionga tashlaysiz, rasmlar 001.png, 002.png… bo'lib saqlanadi.</span></button>
+            <button class="srcc" type="button" data-src="other"><b>Boshqa AI</b><span>Promptlarni nusxalab, Midjourney, Leonardo yoki boshqa saytda yaratasiz.</span></button>
+            <button class="srcc" type="button" data-src="paste"><b>O'z promptlarim</b><span>Boshqa AI yozgan promptlarni shu yerga joylaysiz. Dastur raqamlab beradi.</span></button>
+          </div>
+        </div>
+        <div class="row"><button class="pill on" id="promptBtn" type="button">Promptlarni yozish</button><button class="pill" id="promptStop" type="button" hidden>To'xtatish</button><button class="pill" id="copyAllPrompts" type="button">Hammasini nusxalash</button><button class="pill" id="pastePrompts" type="button">Promptlarni joylash</button><button class="pill" id="v2ScenesBtn" type="button">Sahnalar jadvali</button></div>
+        <div class="panel" id="animPanel"><h3>Animatsiya promptlari</h3><p class="sub">Video faqat rasm bo'lmasin: istagan kadrlaringiz uchun 5–6 soniyalik animatsiya prompti tayyorlang va Flow'da rasmni jonlantirishda ishlating.</p>
+          <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px"><input class="input sm" id="animSel" style="max-width:260px" placeholder="Kadrlar: 1-3, 12, 40" aria-label="Kadrlar"><button class="pill sm on" type="button" data-ahead="auto">Avto: 1-daqiqadagi dramatik 6 ta</button><button class="pill sm" type="button" data-ahead="3">Boshidan 3 ta</button><button class="pill sm" type="button" data-ahead="5">Boshidan 5 ta</button><button class="pill sm" type="button" data-ahead="0">Har 20-kadr</button><select class="input sm" id="animDur" style="max-width:110px" aria-label="Davomiyligi"><option>5</option><option>6</option></select><button class="pill sm on" type="button" id="animBtn">Animatsiya promptini yozish</button><button class="pill sm" type="button" id="animCopy">Nusxalash</button></div>
+          <div class="blocks" id="animList" style="margin-top:12px"></div>
+        </div>
+        <div class="blocks" id="blocks"></div>
+      </div>
+
+      <!-- 6 -->
+      <div class="pane" data-p="6">
+        <div class="two">
+          <div class="panel"><h3>Ovoz yaratish</h3><p class="sub">Gemini TTS bepul kalit bilan ishlaydi. Ovozni tanlang va qanday gapirishini oddiy so'z bilan yozing.</p>
+            <div class="row" style="margin-top:12px"><select id="ttsVoice" hidden aria-hidden="true"></select><button class="pill sm" type="button" id="ttsHear">Ovozni tanlash</button></div>
+            <div class="field" style="margin-top:10px"><input class="input sm" id="ttsStyle" value="" placeholder="Ohang (ixtiyoriy, inglizcha yaxshiroq): calm, warm, serious…" aria-label="Ohang"></div>
+            <div class="row" style="margin-top:10px"><button class="pill sm on" type="button" id="ttsBtn">Ovoz yaratish</button><button class="pill sm" type="button" id="ttsCopy">Matnni nusxalash</button><a class="pill sm" href="https://aistudio.google.com/generate-speech" target="_blank" rel="noopener">AI Studio'da ochish</a></div>
+            <div class="prog" id="ttsProg" hidden style="margin-top:10px"><i></i></div>
+            <p class="note" id="ttsNote" style="margin-top:8px"></p>
+            <audio id="ttsPlayer" controls hidden preload="metadata" style="width:100%;margin-top:8px"></audio>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <label class="drop" id="dropAudio"><div class="big"><svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div style="flex:1;min-width:0"><b id="audName">Ovoz faylini tanlang yoki tashlang</b><div class="note" id="audInfo">MP3, WAV, M4A</div><div class="wave" id="wave"></div></div><input type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden id="audFile"></label>
+            <label class="drop" id="dropImgs"><div class="big"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div><div style="flex:1;min-width:0"><b id="imgName">Rasmlarni tanlang yoki shu yerga tashlang</b><div class="note" id="imgInfo">PNG, JPG, WEBP, MP4 · istalgan nom</div><div class="prog" id="upProg" hidden style="margin-top:8px"><i></i></div></div><input type="file" accept="image/*,video/mp4,.png,.jpg,.jpeg,.webp" multiple hidden id="imgFiles"></label>
+            <div class="row"><button class="pill sm" type="button" id="pickFolder">Rasmlarni tanlash</button><button class="pill sm" type="button" id="musicPick">Fon musiqasi</button><button class="pill sm" type="button" id="sfxPick">O'z effektlarim</button><input type="file" accept="audio/*" hidden id="musicFile"><input type="file" accept="audio/*" multiple hidden id="sfxFiles"><input type="file" webkitdirectory multiple hidden id="dirFiles"></div>
+            <div class="row" id="mediaDel"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="row between"><h3>Rasmlarni ovozga qo'yish</h3></div>
+          <div class="seg sm2" id="alignMode" style="margin-top:10px"><button class="pill on" type="button" data-a="smart">Aqlli: ovozni tinglab</button><button class="pill" type="button" data-a="ai">Aqlli + AI ko'zi</button><button class="pill" type="button" data-a="equal">Teng bo'lib</button><button class="pill" type="button" data-a="timecode">Fayl nomidagi vaqt bo'yicha</button></div>
+          <div class="seg sm2" id="sortMode" style="margin-top:8px"><button class="pill on" type="button" data-s="num">Tartib: nomidagi raqam</button><button class="pill" type="button" data-s="name">Nomi bo'yicha</button><button class="pill" type="button" data-s="time">Yuklangan vaqti</button></div>
+          <p class="sub" style="margin-top:10px">Aqlli rejim ovozdagi pauzalarni topadi va har rasmni o'z gapi aytilgan paytga qo'yadi. Rasm soni gaplar sonidan farq qilsa ham ishlaydi.</p>
+        </div>
+        <div class="panel"><h3>Tekshiruv</h3><div class="checks" id="checks" style="margin-top:6px"></div></div>
+      </div>
+
+      <!-- 8 -->
+      <div class="pane" data-p="8">
+        <div id="expSetup" style="display:flex;flex-direction:column;gap:16px">
+          <div class="qual" id="qual"></div>
+          <div class="panel row between"><div><h3>Tezlik</h3><p class="sub" id="encInfo">Videokarta tekshirilmoqda…</p></div><div class="seg" id="encSel"><button class="pill on" type="button" data-e="auto">Avto</button><button class="pill" type="button" data-e="cpu">Faqat protsessor</button></div></div>
+          <div class="panel row between"><div><h3>Kadr tezligi</h3><p class="sub">60 kadr/s silliqroq, lekin render 2 baravar uzoq.</p></div><div class="seg" id="fpsSel"><button class="pill on" type="button" data-v="30">30 kadr/s</button><button class="pill" type="button" data-v="60">60 kadr/s</button></div></div>
+          <div class="row"><button class="primary" type="button" id="renderBtn">Renderni boshlash <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><span class="note" id="outDirNote"></span></div>
+        </div>
+        <div id="expRun" class="panel" hidden>
+          <div class="render">
+            <div class="ring"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="14"/><circle id="arc" cx="100" cy="100" r="88" fill="none" stroke="url(#og)" stroke-width="14" stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="553"/></svg><span class="pct" id="pct">0%</span></div>
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+              <h3 id="rTitle" style="margin:0;font-size:21px">Render ketyapti</h3>
+              <p class="note" id="rStage"></p>
+              <div class="stats"><div class="stat"><div class="v" id="rTime">0:00</div><div class="k">o'tdi</div></div><div class="stat"><div class="v" id="rLeft">—</div><div class="k">qoldi</div></div><div class="stat"><div class="v" id="rEnc">—</div><div class="k">kodlovchi</div></div></div>
+              <div class="row" id="rRun"><button class="pill" type="button" id="rCancel">To'xtatish</button></div>
+              <div class="row" id="rDone" hidden><button class="primary" type="button" id="rReveal">Papkani ochish <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="pill" type="button" id="rAgain">Qayta render</button></div>
+              <p class="note">Telegram'ga "Fayl" qilib yuboring, oddiy video qilib yuborsangiz Telegram sifatini tushiradi.</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="row between"><div><h3>Muqova</h3><p class="sub">3 ta variant videongiz kadrlaridan yasaladi. Yoqmaganini qayta yarating yoki promptini boshqa AI'ga olib boring.</p></div></div>
+          <div class="covers" id="covers" style="margin-top:14px"></div>
+        </div>
+        <div class="panel">
+          <div class="row between"><h3>Sarlavha, tavsif, teglar</h3><button class="pill sm on" type="button" id="seoBtn">Yozish</button></div>
+          <div class="seo-f" id="seoBox" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bottom" id="bottom"><div class="in">
+    <button class="pill" id="back" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="hide-sm">Orqaga</span></button>
+    <span class="saved" id="savedNote"><i class="dot ok"></i><span class="hide-sm">Saqlandi</span></span>
+    <button class="primary" id="next" type="button"><span id="nextTxt">Keyingisi</span><span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+  </div></div>
+</section>
+
+<!-- EDITOR -->
+<section class="screen" id="s-editor">
+<div class="ed2" id="ed2">
+  <header class="etop">
+    <div class="row" style="gap:6px;flex-wrap:nowrap">
+      <button class="ib" type="button" data-screen="s-home" aria-label="Bosh sahifa" title="Bosh sahifa"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></button>
+      <button class="pill" type="button" id="edBack" style="height:38px"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="hide-sm">Orqaga</span></button>
+      <span class="esep hide-sm"></span>
+      <button class="ib" type="button" id="undoB" aria-label="Bekor qilish" title="Bekor qilish (Ctrl+Z)"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>
+      <button class="ib" type="button" id="redoB" aria-label="Qaytarish" title="Qaytarish (Ctrl+Y)"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/></svg></button>
+    </div>
+    <div class="etitle"><b id="edTitle">Loyiha</b><span class="edot hide-sm"></span><span class="note hide-sm" id="edMeta"></span></div>
+    <div class="row" style="gap:10px;flex-wrap:nowrap"><span class="saved hide-sm" id="edSaved"><i class="dot ok"></i>Saqlandi</span><button class="primary sm" id="edExport" type="button">Eksport <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></div>
+  </header>
+
+  <div class="emain">
+    <aside class="ep" id="lp">
+      <div class="ptabs" role="tablist">
+        <button class="pt on" type="button" data-tool="media"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>Media</button>
+        <button class="pt" type="button" data-tool="text"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Matn</button>
+        <button class="pt" type="button" data-tool="audio"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Audio</button>
+      </div>
+      <div class="ep-b">
+        <div class="tool on" data-tool="media">
+          <input class="input sm" id="mSearch" placeholder="Kadr matni yoki raqami" aria-label="Kadr qidirish">
+          <div id="mBody" class="mgrid"></div>
+          <div class="mfoot"><span id="mTotal"></span><button class="pill xs" type="button" id="replaceImg">Rasmni almashtirish</button><input type="file" accept="image/*,video/mp4" hidden id="replaceFile"></div>
+        </div>
+        <div class="tool" data-tool="text">
+          <div class="clipbox"><div class="row between"><span class="label">Kadr <span id="clipLbl" class="num" style="font-size:13px;color:var(--peach)">001</span> matni</span><span class="note" style="font-size:11.5px">Darrov yangilanadi</span></div><textarea class="input ta" id="clipText" aria-label="Kadr matni"></textarea></div>
+          <div class="row between"><span class="label">Subtitr</span><span class="sw on" id="subSw" role="switch" aria-checked="true" tabindex="0"></span></div>
+          <div class="presets" id="presets">
+            <button class="pre" type="button" data-s="pill"><span style="background:#fff4da;color:#241504;border-radius:99px">Pilla</span></button>
+            <button class="pre" type="button" data-s="kontur"><span style="-webkit-text-stroke:3px #000;paint-order:stroke fill">Kontur</span></button>
+            <button class="pre" type="button" data-s="kino"><span style="color:#ffe7a8;font-weight:500;font-family:Lora,serif">Kino</span></button>
+            <button class="pre" type="button" data-s="karaoke"><span>KARA<em style="font-style:normal;color:#E9C27C">OKE</em></span></button>
+          </div>
+          <div class="field"><span class="label">Shrift</span><select class="input sm" id="sFont" aria-label="Shrift"><option value="Inter" style="font-family:Inter">Inter</option><option value="Inter Display" style="font-family:Inter Display">Inter Display</option><option value="Lora" style="font-family:Lora">Lora</option><option value="Arial" style="font-family:Arial">Arial</option><option value="Arial Black" style="font-family:Arial Black">Arial Black</option><option value="Impact" style="font-family:Impact">Impact</option><option value="Segoe UI" style="font-family:Segoe UI">Segoe UI</option><option value="Calibri" style="font-family:Calibri">Calibri</option><option value="Cambria" style="font-family:Cambria">Cambria</option><option value="Georgia" style="font-family:Georgia">Georgia</option><option value="Times New Roman" style="font-family:Times New Roman">Times New Roman</option><option value="Verdana" style="font-family:Verdana">Verdana</option><option value="Tahoma" style="font-family:Tahoma">Tahoma</option><option value="Trebuchet MS" style="font-family:Trebuchet MS">Trebuchet MS</option><option value="Comic Sans MS" style="font-family:Comic Sans MS">Comic Sans MS</option><option value="Courier New" style="font-family:Courier New">Courier New</option><option value="Consolas" style="font-family:Consolas">Consolas</option><option value="Bahnschrift" style="font-family:Bahnschrift">Bahnschrift</option><option value="Franklin Gothic Medium" style="font-family:Franklin Gothic Medium">Franklin Gothic Medium</option><option value="Palatino Linotype" style="font-family:Palatino Linotype">Palatino Linotype</option><option value="Roboto" style="font-family:Roboto">Roboto</option><option value="Poppins" style="font-family:Poppins">Poppins</option></select></div>
+          <div class="g2c">
+            <div class="ctl"><div class="hd"><span>O'lcham</span><span class="num" id="sSizeV">17</span></div><input type="range" id="sSize" min="11" max="40" value="17" aria-label="O'lcham"></div>
+            <div class="ctl"><div class="hd"><span>Qalinlik</span><span class="num" id="sWV">700</span></div><input type="range" id="sW" min="400" max="800" step="100" value="700" aria-label="Qalinlik"></div>
+          </div>
+          <div class="ctl"><span class="label">Matn rangi</span><div class="swatches" id="sColor"></div></div>
+                    <div class="ctl"><div class="hd"><span>Kontur</span><span class="num" id="sOV">0 px</span></div><input type="range" id="sO" min="0" max="6" value="0" aria-label="Kontur"><div id="sOcW" style="margin-top:6px"></div></div>
+          <div class="ctl"><span class="label">Fon</span><div class="seg sm2" id="sBg"><button class="pill on" type="button" data-b="bg-pill">Pilla</button><button class="pill" type="button" data-b="bg-box">To'rtburchak</button><button class="pill" type="button" data-b="">Yo'q</button></div><div class="swatches" id="sBgC"></div></div>
+          <div class="ctl"><div class="hd"><span>Balandlik</span><span class="num" id="posv">8%</span></div><input type="range" id="pos" min="4" max="45" value="8" aria-label="Subtitr balandligi"></div>
+        </div>
+        <div class="tool" data-tool="audio">
+          <div id="aBody" class="mlist"></div>
+          <span class="label">Balandlik</span>
+          <div class="ctl"><div class="hd"><span>Diktor ovozi</span><span class="num" id="vVolV">100%</span></div><input type="range" id="vVol" min="0" max="150" value="100" aria-label="Diktor"></div>
+          <div class="ctl"><div class="hd"><span>Effektlar</span><span class="num" id="sfxVolV">45%</span></div><input type="range" id="sfxVol" min="0" max="100" value="45" aria-label="Effektlar"></div>
+          <div class="ctl"><div class="hd"><span>Fon musiqasi</span><span class="num" id="mVolV">18%</span></div><input type="range" id="mVol" min="0" max="100" value="18" aria-label="Fon musiqasi"></div>
+          <span class="label">O'tishlardagi effektlar</span>
+          <div class="seg sm2" id="sfxMode"><button class="pill on" type="button" data-sfx="all">Har o'tishda</button><button class="pill" type="button" data-sfx="some">Ba'zida</button><button class="pill" type="button" data-sfx="off">O'chiq</button></div>
+          <p class="note" id="sfxNote"></p>
+          <div class="toggle"><span class="tw">Gapirganda musiqa pasaysin<small>Ovoz ustida musiqa o'zi tinchlanadi</small></span><span class="sw on" id="duckSw" role="switch" tabindex="0"></span></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="ep" id="pp">
+      <div class="ep-h"><div class="ep-t">Ko'rish</div>
+        <div class="row" style="gap:6px"><button class="ib on" type="button" id="ccBtn" aria-label="Subtitr" title="Subtitr">CC</button><button class="ib" type="button" id="safeBtn" aria-label="Xavfsiz hudud" title="Xavfsiz hudud"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="7" y="8" width="10" height="8" rx="1" stroke-dasharray="2 2"/></svg></button></div></div>
+      <div class="pv" id="pv">
+        <div class="stage m-light" id="stage">
+          <div class="layer bgl" id="bgl"></div><div class="layer bgl" id="bgl2" style="opacity:0;pointer-events:none"></div><video class="layer bgv" id="bgv" muted playsinline loop preload="auto" hidden></video><div class="vig" id="vig"></div><div id="flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
+          <div class="safe" id="safe" hidden></div>
+          <div class="info" hidden><span id="iFx"></span><span id="iMot"></span><span id="iClip"></span></div>
+          <div class="ovl" id="ovl"></div>
+          <div class="sub-o bg-pill" id="subo"></div>
+        </div>
+      </div>
+      <div class="pc">
+        <span class="num" id="pTime" style="font-size:15px">00:00 / 00:00</span>
+        <div class="row" style="gap:8px;flex-wrap:nowrap"><button class="ib" type="button" id="prevB" aria-label="Oldingi kadr"><svg viewBox="0 0 24 24"><path d="M6 5v14M19 5 9 12l10 7z"/></svg></button><button class="ib big" type="button" id="playB" aria-label="Ijro"></button><button class="ib" type="button" id="nextB" aria-label="Keyingi kadr"><svg viewBox="0 0 24 24"><path d="M18 5v14M5 5l10 7-10 7z"/></svg></button></div>
+        <div class="row" style="gap:6px;flex-wrap:nowrap"><button class="ib" type="button" id="muteB" aria-label="Ovoz"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg></button><button class="ib" type="button" id="fsB" aria-label="To'liq ekran"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
+      </div>
+    </section>
+
+    <aside class="ep" id="rp">
+      <div class="ptabs" role="tablist">
+        <button class="pt on" type="button" data-tool="anim"><svg viewBox="0 0 24 24"><path d="M4 17c3-6 7-6 10-2s5 2 6-1"/><circle cx="4" cy="17" r="1.5"/></svg><span>Harakat</span></button>
+        <button class="pt" type="button" data-tool="color"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 12 5.6 5.6"/></svg><span>Filtr</span></button>
+        <button class="pt" type="button" data-tool="el"><svg viewBox="0 0 24 24"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.8 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>Element</span></button>
+        <button class="pt" type="button" data-tool="sub"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="6"/><path d="M10 9.5v5l4-2.5z"/></svg><span>Obuna</span></button>
+        <button class="pt" type="button" data-tool="ai"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><span>AI</span></button>
+      </div>
+      <div class="ep-b">
+        <div class="tool on" data-tool="anim">
+          <span class="label">Butun video</span>
+          <div class="modes" id="modes">
+            <button class="mode" type="button" data-m="m-static" data-n="Harakatsiz"><span class="rad"></span><span><b>Faqat rasm</b><span>Har rasm o'z vaqtida chiqadi, harakat yo'q.</span></span></button>
+            <button class="mode on" type="button" data-m="m-light" data-n="Yengil harakat"><span class="rad"></span><span><b>Yengil</b><span>Sekin yaqinlashish, uzoqlashish va siljish.</span></span></button>
+            <button class="mode" type="button" data-m="m-dyn" data-n="Dinamik"><span class="rad"></span><span><b>Dinamik</b><span>Tezroq harakat va zarbali zoom.</span></span></button>
+          </div>
+          <span class="label">Tanlangan kadr (<span id="mClipLbl">001</span>)</span>
+          <div class="seg sm2" id="clipMotion"><button class="pill on" type="button" data-v="auto">Avto</button><button class="pill" type="button" data-v="in">Yaqinlashish</button><button class="pill" type="button" data-v="out">Uzoqlashish</button><button class="pill" type="button" data-v="left">Chapga</button><button class="pill" type="button" data-v="right">O'ngga</button><button class="pill" type="button" data-v="punch">Zarba</button><button class="pill" type="button" data-v="none">Yo'q</button></div>
+          <span class="label">O'tishlar</span>
+          <div class="seg sm2" id="transSel"><button class="pill on" type="button" data-v="auto">Aralash</button><button class="pill" type="button" data-v="mix">Eritish</button><button class="pill" type="button" data-v="slide">Surilish</button><button class="pill" type="button" data-v="light">Yorug'lik</button><button class="pill" type="button" data-v="zoom">Zoom</button><button class="pill" type="button" data-v="cut">Kesish</button></div>
+          <div class="ctl"><div class="hd"><span>O'tish davomiyligi</span><span class="num" id="trDv">0.4 s</span></div><input type="range" id="trD" min="2" max="12" value="4" aria-label="O'tish davomiyligi"></div>
+        </div>
+        <div class="tool" data-tool="color">
+          <div class="seg sm2" id="colScope"><button class="pill on" type="button" data-v="all">Hamma kadrga</button><button class="pill" type="button" data-v="clip">Faqat shu kadrga</button></div>
+          <div class="filters" id="filters"></div>
+          <div class="ctl"><div class="hd"><span>Filtr kuchi</span><span class="num" id="fpv">70%</span></div><input type="range" id="fp" min="0" max="100" value="70" aria-label="Filtr kuchi"></div>
+          <span class="label">Sozlash</span>
+          <div class="ctl"><div class="hd"><span>Yorqinlik</span><span class="num" id="aBv">0</span></div><input type="range" id="aB" min="-40" max="40" value="0" aria-label="Yorqinlik"></div>
+          <div class="ctl"><div class="hd"><span>Kontrast</span><span class="num" id="aCv">0</span></div><input type="range" id="aC" min="-40" max="40" value="0" aria-label="Kontrast"></div>
+          <div class="ctl"><div class="hd"><span>To'yinganlik</span><span class="num" id="aSv">0</span></div><input type="range" id="aS" min="-60" max="60" value="0" aria-label="To'yinganlik"></div>
+          <div class="ctl"><div class="hd"><span>Iliqlik</span><span class="num" id="aWv">0</span></div><input type="range" id="aW" min="-40" max="40" value="0" aria-label="Iliqlik"></div>
+          <button class="pill sm" type="button" id="resetC">Asliga qaytarish</button>
+        </div>
+        <div class="tool" data-tool="el">
+          <p class="note">Element playhead turgan joyga qo'shiladi va timeline'da ko'rinadi. Matnini o'zgartirsa bo'ladi.</p>
+          <div class="addg" id="addg">
+            <button type="button" data-add="num">Raqam kartochkasi<small>Katta raqam va izoh</small></button>
+            <button type="button" data-add="name">Ism yozuvi<small>Kim gapiryapti</small></button>
+            <button type="button" data-add="map">Joy belgisi<small>Shahar yoki davlat</small></button>
+            <button type="button" data-add="date">Sana<small>Yil yoki kun</small></button>
+            <button type="button" data-add="quote">Iqtibos<small>Muhim gap katta harfda</small></button>
+            <button type="button" data-add="arrow">Strelka<small>Biror joyni ko'rsatish</small></button>
+          </div>
+          <span class="label">Qo'shilgan elementlar</span>
+          <div id="elList" class="mlist"></div>
+        </div>
+        <div class="tool" data-tool="sub">
+          <div class="row between"><span class="label">YouTube uslubidagi tugmalar</span><div class="seg sm2" id="sbLang" hidden><button class="pill on" type="button" data-l="all">Hammasi</button><button class="pill" type="button" data-l="uz">O'zbek</button><button class="pill" type="button" data-l="other">Boshqa</button></div></div>
+          <div class="toggle" style="padding:0"><span class="tw">Videoda obuna tugmasi</span><span class="sw on" id="sbOn" role="switch" tabindex="0"></span></div>
+          <div class="sbg" id="sbx"></div>
+          <div class="field"><span class="label">Tugma tili</span><select class="input sm" id="sbLangSel" aria-label="Tugma tili"></select></div>
+          <div class="field"><span class="label">Yozuvi (bo'sh qoldirsangiz tilga qarab o'zi yoziladi)</span><input class="input sm" id="sbText" aria-label="Tugma yozuvi"></div>
+          <div class="field"><span class="label">Qo'shimcha yozuv</span><input class="input sm" id="sbText2" placeholder="masalan: va qo'ng'iroqchani bosing" aria-label="Qo'shimcha yozuv"></div>
+          <div class="field"><span class="label">Joyi</span><div class="seg sm2" id="sbPos"><button class="pill on" type="button" data-p="lb">Chap past</button><button class="pill" type="button" data-p="rb">O'ng past</button><button class="pill" type="button" data-p="c">O'rtada</button></div></div>
+          <div class="field"><span class="label">O'lchami <b id="sbScV">100%</b></span><input type="range" class="rng" id="sbSc" min="40" max="200" step="5" value="100" aria-label="Obuna tugmasi o'lchami"></div>
+          <div class="field"><span class="label">Qachon chiqsin</span><div class="seg sm2" id="sbWhen"><button class="pill on" type="button" data-w="45">0:45 da</button><button class="pill" type="button" data-w="mid">O'rtada</button><button class="pill" type="button" data-w="end">Oxirida</button><button class="pill" type="button" data-w="now">Shu joyda</button></div></div>
+        </div>
+        <div class="tool" data-tool="ai">
+          <span class="label">Bir bosishda</span>
+          <div id="aiList" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div class="row between" style="margin-top:4px"><span class="label">Siz o'ylamagan g'oyalar</span><button class="pill xs" type="button" id="moreIdeas">AI'dan so'rash</button></div>
+          <div id="ideaList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="ep etl">
+    <div class="tl-h">
+      <div class="row" style="gap:10px"><span class="ep-t">Timeline</span><span class="note hide-sm">Bo'sh joy: ijro · ← → kadrlar · Delete: o'chirish · S: bo'lish</span></div>
+      <div class="row" style="gap:6px"><span class="note hide-sm">Masshtab</span><input type="range" id="zoom" min="2" max="40" value="8" style="width:120px" aria-label="Masshtab"><button class="ib" type="button" id="splitB" aria-label="Bo'lish" title="Kadrni bo'lish (S)"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7 4 12l4 5M16 7l4 5-4 5"/></svg></button><button class="pill sm" type="button" id="delB"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>O'chirish</button></div>
+    </div>
+    <div class="tlw" id="tlw"><div class="tlc" id="tlc"></div></div>
+  </section>
+</div>
+<audio id="voiceEl" preload="auto"></audio><audio id="musicEl" preload="auto" loop></audio>
+</section>
+
+<!-- SETTINGS -->
+<section class="screen" id="s-settings">
+  <div class="wrap" style="max-width:1000px;gap:24px;padding-top:12px">
+    <div class="pfilter"><h1 class="big" style="font-size:clamp(28px,4vw,40px)">Sozlamalar</h1><span class="chip" id="verChip"></span></div>
+    <div class="set">
+      <nav class="set-nav" id="setNav"><button class="pill on" type="button" data-sec="k">AI xizmati</button><button class="pill" type="button" data-sec="v">Ovoz</button><button class="pill" type="button" data-sec="r">Render</button><button class="pill" type="button" data-sec="l">Litsenziya</button><button class="pill" type="button" data-sec="u">Yangilanish</button><button class="pill" type="button" data-sec="d">Diagnostika</button><button class="pill" type="button" data-sec="a">Dastur haqida</button></nav>
+      <div class="set-body">
+        <div class="panel" data-sec-b="k"><h3>AI xizmati</h3><p class="sub">Ssenariy va promptlarni qaysi xizmat yozishini tanlang. Hech biri majburiy emas: kalitsiz ham boshqa AI'dan tayyor javobni joylab ishlaysiz.</p>
+          <div class="prov" id="prov"></div>
+          <div id="provBox" style="display:flex;flex-direction:column;gap:12px;margin-top:16px"></div>
+        </div>
+        <div class="panel" data-sec-b="v"><h3>Ovoz (Gemini TTS)</h3>
+          <div class="field" style="margin-top:10px"><span class="label">TTS modeli</span><input class="input sm" id="ttsModel" placeholder="Bo'sh qoldiring: avtomatik"></div>
+          <p class="note" style="margin-top:8px">Bo'sh qolsa dastur ishlaydigan TTS modelni o'zi topadi. Ovoz Gemini kaliti bilan yaratiladi.</p></div>
+        <div class="panel" data-sec-b="r"><h3>Render</h3>
+          <div class="field" style="margin-top:10px"><span class="label">Videolar saqlanadigan papka</span><input class="input sm" id="outDir"></div>
+          <div class="row" style="margin-top:8px"><button class="pill sm" type="button" id="openOut">Papkani ochish</button></div>
+          <div class="toggle" style="margin-top:8px"><span class="tw">Video dvigateli (ffmpeg)<small id="ffInfo">…</small></span><button class="pill sm" type="button" id="ffRetry">Qayta tekshirish</button></div>
+          <div class="field" style="margin-top:6px"><span class="label">O'z ffmpeg papkangiz (ixtiyoriy)</span><input class="input sm" id="ffDir" placeholder="C:\ffmpeg\bin"></div>
+        </div>
+        <div class="panel" data-sec-b="l"><h3>Litsenziya</h3><div class="idbox" style="margin-top:10px"><div><div class="label">Kompyuter ID</div><code id="setId">…</code></div><span class="chip ok" id="setPlan"></span></div></div>
+        <div class="panel" data-sec-b="u"><h3>Yangilanish</h3><p class="sub" style="margin-top:6px">Hozirgi versiya: <b id="updCur"></b></p>
+          <div id="updOnline" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
+          <div class="toggle" style="margin-top:12px"><span class="tw">Yangi versiya faylini o'rnatish<small>Botdan yoki kanaldan olgan FlowCraftStudio.exe faylini tanlang. Loyihalaringiz va litsenziya saqlanib qoladi.</small></span><label class="pill sm">Faylni tanlash<input type="file" accept=".exe" hidden id="updFile"></label></div>
+          <p class="note" id="updMsg" style="margin-top:8px"></p></div>
+        <div class="panel" data-sec-b="d"><div class="row between"><div><h3>Diagnostika</h3><p class="sub" style="margin-top:6px">Dastur ishlagan sari har bir amalni yozib boradi: qayerda tez, qayerda sekin, qayerda xato. API kalitlar, ssenariy va rasmlar yozilmaydi.</p></div></div>
+          <div class="row" style="margin-top:12px"><button class="primary sm" type="button" id="dgSave">Hisobotni saqlash</button><button class="pill sm" type="button" id="dgCopy">Nusxalash</button><button class="pill sm" type="button" id="dgRe">Yangilash</button><button class="pill sm" type="button" id="dgClear">Tozalash</button></div>
+          <p class="note" style="margin-top:8px">Muammo bo'lsa: "Hisobotni saqlash" → fayl videolar papkasida paydo bo'ladi → shu faylni yuboring.</p>
+          <div id="dgBody" style="margin-top:14px"></div></div>
+        <div class="panel" data-sec-b="a"><h3>Dastur haqida</h3><p class="sub" style="margin-top:6px">FlowCraft Video Studio <span id="verTxt"></span>. Savol va takliflar: @osonyoutube_admin. Yangiliklar va darsliklar yopiq kanalda.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMPLATE CREATOR -->
+<section class="screen" id="s-tpl">
+  <div class="wrap" style="max-width:860px;gap:22px;padding-top:12px">
+    <div class="pfilter"><div><h1 class="big" style="font-size:clamp(28px,4vw,40px)">O'z shabloningiz</h1><p class="lede" style="margin-top:10px">To'rtta savolga javob bering. Qoidalarni oddiy gap bilan yozasiz, dastur ularni system promptga aylantiradi.</p></div><label class="pill sm">Fayldan qo'shish<input type="file" accept=".fct,.json" hidden id="tplImport"></label></div>
+    <div class="tn-steps">
+      <div class="tn"><span class="rc">1</span><div class="panel"><h3>Nomi va qisqa tavsifi</h3><input class="input sm" id="tN" placeholder="Masalan: Futbol tarixi" aria-label="Nomi"><input class="input sm" id="tD" placeholder="Masalan: Mashhur o'yinlar haqida hikoya" aria-label="Tavsif"></div></div>
+      <div class="tn"><span class="rc">2</span><div class="panel"><h3>Format va rasm stili</h3><div class="seg" id="tF"><button class="pill on" type="button" data-v="long">Uzun</button><button class="pill" type="button" data-v="short">Shorts</button><button class="pill" type="button" data-v="both">Ikkalasi</button></div><select class="input sm" id="tS" aria-label="Stil"></select></div></div>
+      <div class="tn"><span class="rc">3</span><div class="panel"><h3>Rasmlar uchun nima kerak?</h3><p class="sub">Shunga qarab "Kim va qayerda?" qadami o'zgaradi.</p><div class="needgrid" id="tNeed"><button class="pill on" type="button" data-v="char">Personaj</button><button class="pill" type="button" data-v="loc">Joy</button><button class="pill" type="button" data-v="stock">Stok video</button></div></div></div>
+      <div class="tn"><span class="rc">4</span><div class="panel"><h3>Qoidalar</h3><p class="sub">Xuddi do'stingizga tushuntirgandek yozing: ohang, nima bo'lsin, nima bo'lmasin.</p>
+        <textarea class="input" id="tR" aria-label="Qoidalar" placeholder="Masalan: Hikoyani sport sharhlovchisi kabi qiziqarli aytib ber. Sana va hisoblarni internetdan tekshir. Oxirida tomoshabinga savol ber."></textarea>
+        <div class="row"><button class="pill sm" id="mkPrompt" type="button">System promptga aylantirish</button></div>
+        <textarea class="input gen" id="gen" hidden spellcheck="false"></textarea></div></div>
+    </div>
+    <div class="row"><button class="primary" type="button" id="tSave">Shablonni saqlash <span class="go"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></button><button class="pill" type="button" style="height:48px" id="tShare">Faylga saqlash (.fct)</button></div>
+    <div id="myTpls" class="mlist"></div>
+  </div>
+</section>
+
+<div class="modal" id="modal"><div class="panel mbox"><div class="row between"><h3 id="mTitle"></h3><button class="ib" type="button" id="mClose" aria-label="Yopish"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div id="mBody2"></div></div></div>
+<div class="toast" id="toast"></div>
+<script src="nacl-fast.min.js"></script>
+<script src="mp4-muxer.js"></script>
+<script src="mp4box.all.min.js"></script>
+<script src="local.js"></script>
+<script src="templates.js"></script>
+<script src="tpl_doc.js"></script><script src="presets-v2.js"></script>
+<script src="variety.js"></script>
+<script src="smartsync.js"></script><script src="app.js"></script><script src="fc-v2.js"></script><script src="scenes-v2.js"></script>
+<script src="mobile.js"></script>
+</body>
+</html>

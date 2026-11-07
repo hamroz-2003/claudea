@@ -1,0 +1,144 @@
+/* FlowCraft Studio — yakuniy qatlam: chap panel, yorug' rejim */
+
+/* ---------- studio chap paneli ---------- */
+@media (min-width:901px){
+  .studio{padding:24px 48px 96px 252px!important}
+  .rail{position:fixed!important;left:0;top:64px;bottom:0;width:220px!important;padding:20px 12px!important;margin:0;
+    display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:2px;overflow:visible;
+    border-radius:0!important;background:rgba(18,14,10,.72)!important;border:0!important;border-right:1px solid var(--line)!important;
+    box-shadow:none!important;backdrop-filter:blur(14px)}
+  .rail:hover{width:220px!important;box-shadow:none!important}
+  .rail::before{content:"Qadamlar";display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:0 12px 12px}
+  .rail .ri{height:40px;padding:0 12px;gap:12px;border-radius:10px!important;background:transparent!important;box-shadow:none!important;border:0!important;
+    color:var(--ink-2)!important;font-size:14px;transition:background .15s,color .15s}
+  .rail .ri span{opacity:1!important;transform:none!important;font-size:14px;font-weight:500;transition:none!important}
+  .rail .ri .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;
+    border:1.5px solid var(--line-2);color:var(--ink-3);background:transparent;flex:none}
+  .rail .ri:hover{background:rgba(255,246,228,.05)!important;color:var(--ink)!important}
+  .rail .ri.done .n{border-color:var(--o1);background:var(--o1);color:#1a1206;font-size:0}
+  .rail .ri.done .n::before{content:"";width:9px;height:5px;border-left:2px solid #1a1206;border-bottom:2px solid #1a1206;transform:translateY(-1px) rotate(-45deg)}
+  .rail .ri.now{background:rgba(214,160,73,.12)!important;color:var(--ink)!important}
+  .rail .ri.now span{font-weight:600}
+  .rail .ri.now .n{border-color:var(--o3);color:var(--o3)}
+  .rail .ri.now::after{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--o1)}
+  .rail .ri:not(.done):not(.now){color:var(--ink-3)!important}
+  .rail .ri.lockd{opacity:.5}
+}
+
+/* sozlamalar va mavzu tugmalari */
+.thb svg,.icon-btn svg{width:18px;height:18px}
+
+/* ---------- yorug' rejim ---------- */
+:root[data-th=l]{
+  --bg:#ffffff;--ink:#17130e;--ink-2:#4d453b;--ink-3:#8a8073;
+  --o1:#C8892B;--o2:#9C6416;--o3:#A86E14;--peach:#E7B866;--cream:#fff;--deep:#f4ece0;--capink:#fff;
+  --line:#e7e1d8;--line-2:#d5cbbd;--glass:#fafaf8;--well:#f4f2ee;
+  --capgrad:linear-gradient(135deg,#D9A24A,#C08328);--bodygrad:#ffffff;
+  --ok:#1f8a4c;--warn:#b7791f;--err:#c0392b;color-scheme:light}
+[data-th=l] body{background:#fff!important;color:var(--ink)}
+[data-th=l] body::before{display:none}
+[data-th=l] .top{background:#fff!important;border-bottom:1px solid var(--line)!important;backdrop-filter:none}
+[data-th=l] .side{background:#fafaf8!important;border-right:1px solid var(--line)!important}
+[data-th=l] .sbtn{color:var(--ink-2)}
+[data-th=l] .sbtn:hover{background:#f1ede6;color:var(--ink)}
+[data-th=l] .sbtn.on,[data-th=l] .sbtn[aria-current=page]{background:#C8892B!important;color:#fff!important}
+[data-th=l] .sbtn.on svg,[data-th=l] .sbtn.on span{color:#fff!important}
+[data-th=l] .rail{background:#fafaf8!important;border-right:1px solid var(--line)!important}
+[data-th=l] .rail .ri:hover{background:#f1ede6!important}
+[data-th=l] .rail .ri.now{background:#f6ead6!important}
+[data-th=l] .rail .ri.done .n{background:#C8892B;border-color:#C8892B}
+[data-th=l] .rail .ri.done .n::before{border-color:#fff}
+[data-th=l] .panel,[data-th=l] .tcard,[data-th=l] .mbox,[data-th=l] .act,[data-th=l] .blk,[data-th=l] .impc,[data-th=l] .hop,[data-th=l] .srcc{
+  background:#fff!important;border:1px solid var(--line)!important;box-shadow:0 1px 2px rgba(23,19,14,.04),0 8px 24px -16px rgba(23,19,14,.18)!important;color:var(--ink)}
+[data-th=l] .input,[data-th=l] input,[data-th=l] textarea,[data-th=l] select{background:#fff!important;color:var(--ink)!important;border-color:var(--line-2)!important}
+[data-th=l] .pill{background:#fff;color:var(--ink);border-color:var(--line-2)}
+[data-th=l] .pill:hover{background:#f6f3ee}
+[data-th=l] .pill.on,[data-th=l] .pill.primary,[data-th=l] .primary{background:#C8892B!important;color:#fff!important;border-color:#C8892B!important}
+[data-th=l] .seg{background:#f4f2ee!important;border-color:var(--line)!important}
+[data-th=l] .chip{background:#f4f2ee;color:var(--ink-2);border-color:var(--line)}
+[data-th=l] .sty{background:#fff;border-color:var(--line)}
+[data-th=l] .sty.on{background:#fbf3e6;border-color:#C8892B;box-shadow:0 0 0 1px #C8892B inset}
+[data-th=l] .bar,[data-th=l] .actbar,[data-th=l] .foot{background:linear-gradient(180deg,rgba(255,255,255,0),#fff 40%)!important}
+[data-th=l] .go{background:#fff!important;color:#C8892B!important}
+[data-th=l] #toast{background:#17130e;color:#fff}
+[data-th=l] .overlay,[data-th=l] .modal-bg{background:rgba(23,19,14,.35)}
+[data-th=l] .step-h .eyebrow{color:var(--ink-3)}
+[data-th=l] .empty{color:var(--ink-3)}
+[data-th=l] code,[data-th=l] .kbd{background:#f4f2ee;color:var(--ink)}
+[data-th=l] .rc:not(.done):not(.now){background:#f4f2ee!important}
+[data-th=l] .rc.now{background:#fff!important}
+@media (min-width:901px){.rail{height:auto!important;max-height:none!important;bottom:0!important}}
+[data-th=l] body{background:#fff!important}
+[data-th=l] .bottom{background:rgba(255,255,255,.94)!important;border-top:1px solid var(--line)!important;backdrop-filter:blur(10px)}
+[data-th=l] .bottom .saved{color:var(--ink-2)}
+[data-th=l] .studio,[data-th=l] .screen{background:transparent!important}
+[data-th=l] .glow{display:none!important}
+@media (min-width:901px){.rail{height:calc(100vh - 64px)!important}}
+/* asosiy menyu: qat'iy kenglik, kengaymaydi */
+@media (min-width:901px){
+  .side,.side:hover{width:88px!important}
+  .sbtn span{font-size:11.5px}
+}
+@media (min-width:901px){.studio~.bottom,.bottom{z-index:45}#bottom{left:220px}}
+.imgm{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;max-height:56vh;overflow:auto;padding:2px}
+.imgm-i{position:relative;border-radius:10px;overflow:hidden;border:2px solid transparent;background:var(--well);padding:0;text-align:left}
+.imgm-i img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.imgm-i span{display:block;font-size:11px;padding:4px 6px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imgm-i.on{border-color:var(--err)}
+.imgm-i.on::after{content:"";position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--err) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center/12px no-repeat}
+#mediaDel:empty{display:none}
+#mediaDel .pill svg{width:14px;height:14px;margin-right:4px;vertical-align:-2px}
+.ytb{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--glass)}
+.ytb-h{display:flex;gap:12px;align-items:center}
+.ytb-h img{width:120px;aspect-ratio:16/9;object-fit:cover;border-radius:8px;flex:none;background:var(--well)}
+.ytb-h b{display:block;font-size:15px}.ytb-h small{display:block;color:var(--ink-2);font-size:13px;margin-top:4px}
+.ytb dl{display:grid;grid-template-columns:130px 1fr;gap:8px 14px;margin:14px 0 0;font-size:13.5px}
+.ytb dt{color:var(--ink-3);font-weight:600}.ytb dd{margin:0;color:var(--ink)}
+.ytb .ytag{letter-spacing:0;text-transform:none;display:inline-block;padding:2px 8px;border-radius:6px;background:var(--well);margin:0 4px 4px 0;font-size:12.5px}
+@media (max-width:600px){.ytb dl{grid-template-columns:1fr}}
+
+/* ---------- yengil rejim: ortiqcha effektlarsiz ---------- */
+body::before{animation:none!important}
+.top,.side,.rail,.bottom,.bar,.actbar,.foot,.act,.mbox{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.tcard{animation:none!important}
+.input.secret,input.secret{-webkit-text-security:disc}
+input.secret:focus{-webkit-text-security:none}
+
+/* montaj AI paneli: bir xil, tekis kartochkalar */
+.air{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:12px!important;padding:12px 14px!important;border-radius:12px!important}
+.air-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.air-t b{font-size:13.5px;line-height:1.3}
+.air-t small{font-size:12px;line-height:1.4;color:var(--ink-3)}
+.air .tg{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--o3);font-weight:600}
+.air>.pill{min-width:84px;justify-content:center}
+.air>.note{font-size:11.5px;min-width:84px;text-align:center}
+
+/* o'rnatilgan yadro rejimida (4.0+) eski yadro sozlamalari kerak emas */
+html.fcl #ffBanner,html.fcl #ffRetry,html.fcl #ffInfo,html.fcl .toggle:has(#ffRetry),html.fcl .field:has(#ffDir),html.fcl .field:has(#outDir),html.fcl #encSel{display:none!important}
+html.fcl [data-sec-b="u"] input[type=file],html.fcl [data-sec-b="u"] .toggle{display:none!important}
+
+/* 4.0.3: animatsiyalar butunlay o'chirildi — har qanday kompyuterda darhol, yengil ochiladi */
+/* ...lekin ko'rish oynasidagi (video) harakatlar — zoom, o'tishlar, subtitr — saqlanadi */
+:not(#stage):not(#stage *),:not(#stage *)::before,:not(#stage *)::after{animation:none!important;transition:none!important}
+.rv,.word span,.tag,.load{opacity:1!important;transform:none!important;filter:none!important}
+.glow,.grain,.mark .halo{display:none!important}
+*,*::before,*::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.act{padding:28px 30px 30px;background:#17110d!important}[data-th=l] .act{background:#fff!important}
+
+/* 4.0.4: video klip ko'rish oynasida */
+#stage .bgv{left:0;top:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:1}
+#stage .bgv[hidden]{display:none}
+/* ustki element o'lchami joyidan siljitmasdan ham o'zgaradi */
+.ovl.p-lb:not(.free){scale:var(--sc,1);transform-origin:left bottom}
+.ovl.p-rb:not(.free){scale:var(--sc,1);transform-origin:right bottom}
+.ovl.p-c:not(.free){scale:var(--sc,1);transform-origin:center bottom}
+
+/* 4.0.4: uzun loyiha nomi ekranni yonga surib yubormasin */
+.proj{min-width:0;max-width:100%;overflow:hidden}
+.proj .meta{min-width:0}
+.proj .meta strong{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#planTpl{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* telefon tizimida shrift kattalashtirilgan bo'lsa ham tugma matni ichida qolsin */
+html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* tasmada barmoq bilan surish/cho'zish ishlasin */
+#tlc [data-drag],#tlc [data-eli],#tlc [data-as],#tlc .rh,#tlc [data-rul]{touch-action:none}

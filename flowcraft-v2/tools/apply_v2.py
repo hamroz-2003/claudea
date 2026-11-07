@@ -88,6 +88,12 @@ def main(src: Path, dst: Path) -> None:
         "const w=tx.map(t=>Math.max(1,String(t).replace(/\\s+/g,' ').length));const sum=w.reduce((a,b)=>a+b,0);\n"
         " const d=w.map(x=>Math.max(.3,T*x/sum));return{ok:true,durations:d,total:T,silences:0,ms:Math.round(performance.now()-T0)}}"
     ) + s[b:]
+    # barqaror qurilma ID: Android ko'prigida deviceId() bo'lsa (qayta o'rnatishda o'zgarmaydi), saqlangan ID bo'lmaganda shuni ishlatamiz
+    s = patch(s, "let id=await DB.get('kv','deviceId');if(id)return id;",
+              "let id=await DB.get('kv','deviceId');if(id)return id;"
+              "if(isAndroid&&AND.deviceId){try{const a=String(AND.deviceId()||'');"
+              "if(/^FC-[0-9A-F]{4}(-[0-9A-F]{4}){4}$/.test(a)){await DB.put('kv','deviceId',a);return a}}catch(_){}}",
+              "local: stable device id")
     s = patch(s, "if(mo==='punch'){",
               "if(mo==='shake'){const k=t*13;return{s:z*1.03,x:0.004*Math.sin(k*2.1)+0.003*Math.sin(k*3.7)}}\n if(mo==='punch'){",
               "local: shake motion")

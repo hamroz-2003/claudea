@@ -1,0 +1,99 @@
+/* FlowCraft Studio — yangi ko'rinish: iliq oltin shisha + grafit. Faqat ko'rinish; ishlash o'zgarmaydi. */
+:root{
+  --bg:#0e0b08;--ink:#f7f0e4;--ink-2:rgba(247,240,228,.72);--ink-3:rgba(247,240,228,.44);
+  --o1:#D6A049;--o2:#B07A2A;--o3:#E9C27C;--peach:#F2D193;--cream:#F8E9C9;--deep:#3b2711;--capink:#241504;
+  --line:rgba(233,194,124,.13);--line-2:rgba(233,194,124,.3);--glass:rgba(255,246,228,.045);--well:rgba(0,0,0,.34);
+  --capgrad:linear-gradient(135deg,#E9C27C 0%,#F4D9A0 55%,#D7A04B 100%);
+  --bodygrad:linear-gradient(180deg,#14100b 0%,#17110a 60%,#241a0e 100%);
+  --ok:#8FD6A0;--warn:#F2C766;--err:#F27B6B;
+  --r1:20px;--r2:14px;
+}
+body{background:radial-gradient(1200px 700px at 85% -10%,rgba(214,160,73,.16),transparent 60%),radial-gradient(900px 600px at -5% 105%,rgba(176,122,42,.14),transparent 62%),#0e0b08}
+.g1{background:radial-gradient(circle,#D6A049 0%,#8a5a1c 24%,#2a1a0a 48%,transparent 66%)!important}
+.g2{background:radial-gradient(circle,#B07A2A 0%,#4a2f10 30%,transparent 65%)!important}
+.grain{opacity:.045}
+/* tilt-free glass panels */
+.panel,.tcard,.pcard,.card{border-radius:var(--r1)!important;border:1px solid var(--line)!important;background:linear-gradient(180deg,rgba(255,246,228,.06),rgba(255,246,228,.02))!important;backdrop-filter:blur(14px) saturate(1.1);box-shadow:0 18px 40px -26px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,246,228,.05)}
+.tcard{padding:8px!important;transition:transform .3s var(--ease),border-color .25s,box-shadow .25s}
+.tcard:hover{transform:translateY(-3px);border-color:var(--line-2)!important}
+.tcard.sel{border-color:var(--o3)!important;box-shadow:0 0 0 1px var(--o3),0 22px 44px -22px rgba(214,160,73,.45)}
+.tvis{border-radius:14px!important}
+.tnum{background:rgba(14,11,8,.72)!important;color:var(--o3)!important;border:1px solid var(--line-2);backdrop-filter:blur(6px)}
+.tplay{background:rgba(14,11,8,.72)!important;color:var(--cream)!important}
+.tmeta b{font-weight:700;letter-spacing:-.01em}
+.tneeds span{border-radius:8px!important;background:rgba(233,194,124,.08)!important;border:1px solid var(--line)!important;color:var(--ink-2)!important}
+/* pills & buttons: less bubbly, more precise */
+.pill{height:38px;border-radius:12px;padding:0 16px;font-weight:600;background:var(--glass);border:1px solid var(--line);transition:all .2s var(--ease)}
+.pill:hover{border-color:var(--line-2);color:var(--ink);background:rgba(233,194,124,.08)}
+.pill.sm{height:32px;border-radius:10px}.pill.xs{height:26px;border-radius:8px}
+.pill.on,.pill.primary{color:var(--capink)!important;background:var(--capgrad)!important;border-color:transparent!important;box-shadow:0 10px 26px -12px rgba(214,160,73,.6)!important;font-weight:700}
+.seg{border-radius:14px;background:rgba(0,0,0,.28);padding:3px}
+.seg .pill{border-radius:11px;border-color:transparent;background:transparent}
+.seg .pill.on{background:var(--capgrad)!important}
+.chip{border-radius:9px;background:rgba(233,194,124,.07)}
+.eyebrow{color:var(--o3);letter-spacing:.2em;font-size:11px}
+.input,select.input{border-radius:14px!important;background:rgba(0,0,0,.32);border:1px solid var(--line);height:48px}
+textarea.input{border-radius:16px!important}
+.input:focus{border-color:var(--o3)!important;box-shadow:0 0 0 3px rgba(233,194,124,.16)!important}
+.toggle.on,.toggle[aria-checked=true]{background:var(--o3)!important}
+/* side nav (home screens): slim glass rail that opens on hover */
+.side{width:72px;background:linear-gradient(180deg,rgba(255,246,228,.055),rgba(255,246,228,.02))!important;border-right:1px solid var(--line)!important;backdrop-filter:blur(16px);transition:width .35s var(--ease);overflow:hidden}
+.side:hover{width:120px}
+.sbtn{width:100%;border-radius:14px;color:var(--ink-3)}
+.sbtn:hover{color:var(--ink);background:rgba(233,194,124,.07)}
+.sbtn.on,.sbtn[aria-current=page]{color:var(--capink)!important;background:var(--capgrad)!important}
+.sbtn.on svg,.sbtn.on span{color:var(--capink)!important}
+/* studio rail: flat numbered nodes */
+.rail .rn,.rail button,.rn{border-radius:50%}
+.rail [class*=now],.rail .now{background:var(--capgrad)!important;color:var(--capink)!important;border-color:transparent!important;box-shadow:0 0 0 5px rgba(233,194,124,.16),0 10px 24px -8px rgba(214,160,73,.55)!important}
+.rail [class*=done]{border-color:var(--o3)!important;color:var(--o3)!important}
+/* bottom action bar */
+.bar,.actbar,.foot{background:linear-gradient(180deg,rgba(14,11,8,0),rgba(14,11,8,.92) 40%)!important;backdrop-filter:blur(10px)}
+.go{background:#241504!important;color:var(--o3)!important;box-shadow:none!important}
+/* style picker: compact swatch cards instead of giant circles */
+.styles{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))!important;gap:10px!important}
+.sty{flex-direction:row!important;gap:10px!important;align-items:center!important;padding:8px 10px;border-radius:14px;border:1px solid var(--line);background:var(--glass);text-align:left;font-size:12.5px!important;line-height:1.2;transition:all .2s var(--ease)}
+.sty:hover{border-color:var(--line-2);background:rgba(233,194,124,.07)}
+.sty.on{border-color:var(--o3);background:rgba(233,194,124,.12);box-shadow:0 0 0 1px var(--o3) inset}
+.sty .swc{width:30px!important;height:30px!important;flex:none;aspect-ratio:1;border:0!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important}
+.sty.on .swc{border:0!important;box-shadow:0 0 0 2px var(--o3)!important}
+.tplinfo{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2);padding:10px 4px 0}
+/* headings */
+h1,h2{letter-spacing:-.025em}
+/* splash/activation */
+.act,.mbox{border-radius:22px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,246,228,.07),rgba(255,246,228,.02));backdrop-filter:blur(18px)}
+/* editor tweaks */
+.tool.on,.tool:hover{color:var(--o3)}
+.ph,.ph2{background:var(--o3)!important}
+.rc{color:#241504!important;text-shadow:none!important;font-weight:800}
+.rc.done{color:#241504!important}
+.rc.now{color:var(--o3)!important;background:#17110b!important}
+.rc:not(.done):not(.now){background:rgba(255,246,228,.05)!important;color:var(--ink-3)!important;border:1px solid var(--line)!important}
+.rl{background:rgba(233,194,124,.16)!important}
+#styleTxt{min-height:72px!important;height:72px}
+
+/* ===== Studio 4 uslubi: shisha rail (hover'da kengayadi), tor sarlavha, yengil harakat ===== */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(90deg,transparent 0 139px,rgba(237,184,103,.06) 139px 140px);animation:lnmv 60s linear infinite}
+@keyframes lnmv{to{background-position-x:280px}}
+.studio{display:block!important;max-width:none!important;margin:0!important;padding:20px 56px 90px 118px!important}
+.work{max-width:1240px;margin:0 auto}
+.rail{position:fixed!important;left:20px;top:84px;bottom:76px;width:72px;z-index:40;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:6px;padding:14px 12px!important;border-radius:26px;overflow:hidden;background:linear-gradient(150deg,rgba(58,43,28,.92),rgba(24,18,12,.95));border:1px solid rgba(255,226,190,.16);box-shadow:inset 0 1px 0 rgba(255,226,190,.28),0 18px 40px -22px rgba(0,0,0,.85);backdrop-filter:blur(22px);transition:width .5s cubic-bezier(.22,1,.36,1),box-shadow .4s}
+.rail:hover{width:236px;box-shadow:inset 0 1px 0 rgba(255,226,190,.28),0 30px 70px -20px rgba(0,0,0,.9)}
+.ri{display:flex;align-items:center;gap:14px;height:44px;padding:0 12px;border-radius:14px;color:#fff;white-space:nowrap;position:relative;flex:none;transition:background .3s,color .3s;text-align:left}
+.ri:hover{background:rgba(255,226,190,.09)}
+.ri .n{width:20px;text-align:center;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;flex:none}
+.ri span{opacity:0;transform:translateX(-10px);transition:opacity .2s,transform .3s cubic-bezier(.22,1,.36,1);font-size:14px;font-weight:600}
+.rail:hover .ri span{opacity:1;transform:none;transition:opacity .45s .12s,transform .55s cubic-bezier(.22,1,.36,1) .1s}
+.ri:not(.done):not(.now){color:#7E705E}
+.ri.now{background:rgba(237,184,103,.16);color:#F3D08A}
+.ri.now::after{content:"";position:absolute;left:0;width:3px;height:22px;border-radius:3px;background:#EDB867}
+.ri.opt{opacity:.6}
+.step-h .eyebrow{color:#AC9D88;letter-spacing:.16em;font-size:11.5px}
+.step-h h1{font-size:30px!important;font-weight:800;letter-spacing:-.03em}
+.top{background:linear-gradient(150deg,rgba(255,226,190,.08),rgba(255,226,190,.02));border-bottom:1px solid rgba(255,226,190,.1);backdrop-filter:blur(18px)}
+.panel,.tcard{background:linear-gradient(150deg,rgba(255,226,190,.11),rgba(255,226,190,.035))!important;border:1px solid rgba(255,226,190,.16)!important;box-shadow:inset 0 1px 0 rgba(255,226,190,.22),0 18px 40px -24px rgba(10,5,0,.85)!important}
+.pill.on,.pill.primary{background:linear-gradient(135deg,#F6D48F,#D49A3A)!important}
+.tcard{animation:rise .6s cubic-bezier(.2,.8,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.rail{width:56px;padding:10px 6px!important}.studio{padding-left:84px!important;padding-right:16px!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

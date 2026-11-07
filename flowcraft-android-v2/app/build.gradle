@@ -1,0 +1,33 @@
+plugins { id "com.android.application" }
+
+android {
+    namespace "uz.flowcraft.studio"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "uz.flowcraft.studio"
+        minSdk 24            // WebCodecs uchun yangilangan Android System WebView kerak
+        targetSdk 35
+        versionCode 50000
+        versionName "5.0.0-v2"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    androidResources {
+        noCompress += ["mp4", "m4a", "wav", "pack", "woff"]
+    }
+}
+
+dependencies {
+    // tashqi kutubxona yo'q: faqat Android SDK (APK kichik bo'lsin)
+}
