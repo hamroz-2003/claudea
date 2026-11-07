@@ -563,10 +563,12 @@
       if (k === 0) sc += 2;                            // 1-kadr har doim hook
       return { s, sc };
     }).sort((a, b) => b.sc - a.sc);
-    const picked = [];
+    // video boshlanishi (1-kadr) har doim hook: tomoshabin birinchi soniyada qoladi yoki ketadi
+    const opening = cands.find((c) => c.s.id === segments[0].id);
+    const picked = opening && count > 0 ? [opening.s] : [];
     for (const c of cands) {
       if (picked.length >= count) break;
-      if (picked.every((p) => Math.abs(p.start - c.s.start) >= minGap)) picked.push(c.s);
+      if (!picked.includes(c.s) && picked.every((p) => Math.abs(p.start - c.s.start) >= minGap)) picked.push(c.s);
     }
     for (const c of cands) {                           // oraliq tufayli kam bo'lsa, to'ldiramiz
       if (picked.length >= Math.min(count, cands.length)) break;
@@ -674,7 +676,9 @@
     const raw = clipsFrom(segments, media, rows);
 
     // 3) hook va harakat
-    const hookIds = new Set(planHooks(segments, { count: o.hookCount ?? 6 }));
+    // foydalanuvchi animatsiya promptini yozgan kadrlar ustun; bo'lmasa avtomatik tanlov
+    const userHooks = (o.hookIds || []).filter((id) => id >= 1 && id <= segments.length);
+    const hookIds = new Set(userHooks.length ? userHooks : planHooks(segments, { count: o.hookCount ?? 6 }));
     const clips = raw.map((c) => {
       const md = media[c.media];
       const d = c.end - c.start;
@@ -688,7 +692,8 @@
       };
     });
     assignMotion(clips);
-    report.hooks = [...hookIds];
+    report.hooks = [...hookIds].sort((a, b) => a - b);
+    report.hookSource = userHooks.length ? "user" : "auto";
     report.spans = clips.filter((c) => c.segs.length > 1).length;     // 1 rasm → bir nechta gap
     report.splits = rows.filter((r) => r.length > 1).length;           // 1 gap → bir nechta rasm
     stage("Tayyor", 1);

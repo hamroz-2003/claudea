@@ -7,8 +7,8 @@ Bu papka FlowCraft 4.x ilovasining `assets` qismiga qo'shiladigan V2 modullarini
 | # | Modul | Holati | Nega shu tartibda |
 |---|---|---|---|
 | 1 | Aqlli audio-rasm sinxronizatori (STT + majburiy moslash + rasm ma'nosi + drift himoyasi) | **tayyor** | Asosiy xato shu yerda; qolgan modullar uning vaqt jadvaliga tayanadi |
-| 2 | Hook animatsiya dvigateli | **yadrosi tayyor** (hook tanlash, `motion_prompt`, MP4'ni vaqtga moslash, kamera harakati). UI qismi qolgan | 1-modul aniq vaqt bergandan keyingina "birinchi 60 soniya" ma'noga ega |
-| 3 | Yagona sahna jadvali (3–6-qadamlar o'rniga bitta jadval) | navbatda | 1–2-modullar yaratgan `segments`, `clips.segs`, `hook` maydonlari jadval qatoriga aylanadi |
+| 2 | Hook animatsiya dvigateli | **tayyor** (yadro + interfeys) | 1-modul aniq vaqt bergandan keyingina "birinchi 60 soniya" ma'noga ega |
+| 3 | Yagona sahna jadvali | **tayyor** | 1–2-modullar yaratgan `segments`, `clips.segs`, `hook` maydonlari jadval qatoriga aylanadi |
 | 4 | 14 ta kanal preseti (faqat uslub va SEO) | navbatda | Oldingi modullarga ta'sir qilmaydi, oxirida qo'shiladi |
 
 ## 1-modul: nima o'zgardi
@@ -38,6 +38,34 @@ Bu papka FlowCraft 4.x ilovasining `assets` qismiga qo'shiladigan V2 modullarini
    - statik kadrlarda yaqinlashish, uzoqlashish, chapga va o'ngga suriladigan kamera harakatlari navbatma-navbat almashadi;
    - kuchli lahzalarda (hujum, portlash, vahima…) yengil silkinish bo'ladi, lekin kamida 4 kadr oralig'ida.
 
+## 2-modul interfeysi
+
+- **5-qadam, "Animatsiya promptlari":**
+  - yangi **"Avto: 1-daqiqadagi dramatik 6 ta"** tugmasi bor (standart tanlangan);
+  - 1-kadr har doim hookga kiradi, qolganlari jang, olov, sir, "birdan" kabi so'zlar, undov va yillar bo'yicha tanlanadi;
+  - tanlangan kadrlar orasida kamida 6 soniya bo'ladi.
+- **6-qadam, "Birinchi daqiqa: hook kadrlar" paneli:** har hook kadr uchun eskiz, vaqt va holat ko'rsatiladi ("MP4 bor", "faqat rasm" yoki "rasm yo'q"). Ikki tugma bor: **MP4 yuklash** (fayl avtomatik `NNN.mp4` deb nomlanadi) va harakat promptini yozish yoki nusxalash.
+- **Hook kim tanlaydi:** foydalanuvchi animatsiya prompti yozgan yoki MP4 yuklagan kadrlar har doim hook bo'ladi va avtomatik tanlovdan ustun turadi.
+- **Bir kadrda ham rasm, ham MP4 bo'lsa:** montajga faqat video kiradi, gap bo'linmaydi.
+- **Tahrirlovchi:** vaqt chizig'ida hook kliplari oltin rangli chegara va nuqta bilan belgilanadi.
+
+## 3-modul: Sahnalar jadvali
+
+5-qadamdagi **"Sahnalar jadvali"** tugmasi yoki 6-qadamdagi hook paneli orqali ochiladi. Ekran telefonda ham to'liq ishlaydi.
+
+**Har bir kartochka (bitta kadr) quyidagilarni bir joyda jamlaydi:**
+
+| Maydon | Manba | Nima qilish mumkin |
+|---|---|---|
+| `scene_number`, `start`–`end` | 1-modul (`P.sync.segments`, ssenariy o'zgarmagan bo'lsa) | — |
+| Diktor matni | `P.frames` | Tahrirlash (ovoz bilan mos kelmasa ogohlantiradi) |
+| `CHAR-n`, `LOC-n` | 4-qadam referenslari (personaj ismi matnda bormi; joy oralig'i) | — |
+| Rasm prompti | `P.prompts` | Tahrirlash, nusxalash, **faqat shu kadrni qayta yozish** (mavjud generator, uslub va DNK qoidalari bilan) |
+| Hook + harakat prompti | `P.anim` | Belgilash yoki olib tashlash, yozish, nusxalash |
+| Rasm yoki video | `media/NNN.*` | **Almashtirish** (shu kadrning fayli o'sha nom bilan yoziladi, dublikat paydo bo'lmaydi) |
+
+- **Yuqori panel:** holat (prompt, rasm va hook MP4 soni), filtrlar ("Hammasi", "Kamchiligi bor", "Hook kadrlar"), **"Montajni yangilash"** va "Montajga o'tish" tugmalari.
+
 ## O'lchangan natijalar
 
 Sintetik nutqda sinaldi: verguldagi pauzalar, pauzasiz ulab o'qilgan gaplar va Gemini kabi xatolar (vaqt ±150 ms, 8% xato so'z, 3% tushib qolgan so'z).
@@ -63,7 +91,7 @@ python3 flowcraft-v2/tools/apply_v2.py <loyiha>/app/src/main/assets <loyiha>/app
 ```
 
 Skript:
-- `smartsync.js`, `fc-v2.js` va `v2.css` fayllarini qo'shadi;
+- `smartsync.js`, `fc-v2.js`, `scenes-v2.js` va `v2.css` fayllarini qo'shadi;
 - `app.js`, `local.js` va `index.html` ga aniq yamoqlar qo'llaydi. Har bir almashtirish aynan bir marta mos kelishi kerak, aks holda skript to'xtaydi va hech narsani buzmaydi.
 
 Shundan keyin `versionCode` ni oshirib, o'z imzo kalitingiz bilan yangi APK yig'ing.
@@ -71,5 +99,6 @@ Shundan keyin `versionCode` ni oshirib, o'z imzo kalitingiz bilan yangi APK yig'
 ## Testlar
 
 ```bash
-node --test flowcraft-v2/tests/smartsync.test.js      # 14 ta test, ~3 s
+node --test flowcraft-v2/tests/smartsync.test.js      # 15 ta test, ~3 s
+# brauzer testlari (yamoqlangan ilova ustida): tests/e2e_browser.js, tests/e2e_modules23.js
 ```

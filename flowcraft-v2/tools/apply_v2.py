@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-NEW_FILES = ["smartsync.js", "fc-v2.js", "v2.css"]
+NEW_FILES = ["smartsync.js", "fc-v2.js", "scenes-v2.js", "v2.css"]
 
 
 def patch(text: str, old: str, new: str, label: str) -> str:
@@ -44,6 +44,9 @@ def main(src: Path, dst: Path) -> None:
     s = patch(s, "let want=E.t-st[i];if(d>0.05)want=want%d;want=Math.max(0,want);",
               "let want=E.t-st[i];if(d>0.05)want=c.fit?FCSync.clipSourceTime(want,c.fit,d):want%d;"
               "want=Math.max(0,want);v.playbackRate=(c.fit&&c.fit.rate)||1;", "app: preview video fit")
+    s = patch(s, "if(b){const n=P.frames?.length||0,c=+b.dataset.ahead;",
+              "if(b){if(b.dataset.ahead==='auto'){$('#animSel').value=FCV2.hookFramesFromScript(6).map(x=>x+1).join(', ');return}"
+              "const n=P.frames?.length||0,c=+b.dataset.ahead;", "app: auto hook selection")
     s = patch(s, "clips:clips().map((c,i)=>({img:c.img,d:c.d,motion:motionOf(i),",
               "clips:clips().map((c,i)=>({img:c.img,d:c.d,motion:motionOf(i),fit:c.fit||null,", "app: render job keeps fit")
     p.write_text(s, encoding="utf-8")
@@ -73,12 +76,19 @@ def main(src: Path, dst: Path) -> None:
     p = dst / "index.html"
     s = p.read_text(encoding="utf-8")
     s = patch(s, '<script src="app.js"></script>',
-              '<script src="smartsync.js"></script><script src="app.js"></script><script src="fc-v2.js"></script>',
+              '<script src="smartsync.js"></script><script src="app.js"></script><script src="fc-v2.js"></script>'
+              '<script src="scenes-v2.js"></script>',
               "html: scripts")
     s = patch(s, 'data-a="smart">Gaplarga moslab (aqlli)</button>',
               'data-a="smart">Aqlli: ovozni tinglab</button>', "html: smart label")
     s = patch(s, 'data-a="ai">AI bilan (aniq)</button>',
               'data-a="ai">Aqlli + AI ko\'zi</button>', "html: ai label")
+    s = patch(s, '<button class="pill sm" type="button" data-ahead="3">Boshidan 3 ta</button>',
+              '<button class="pill sm on" type="button" data-ahead="auto">Avto: 1-daqiqadagi dramatik 6 ta</button>'
+              '<button class="pill sm" type="button" data-ahead="3">Boshidan 3 ta</button>', "html: auto hook button")
+    s = patch(s, 'id="pastePrompts" type="button">Promptlarni joylash</button>',
+              'id="pastePrompts" type="button">Promptlarni joylash</button>'
+              '<button class="pill" id="v2ScenesBtn" type="button">Sahnalar jadvali</button>', "html: scenes button")
     if 'href="v2.css"' not in s:
         s = patch(s, "</head>", '<link rel="stylesheet" href="v2.css">\n</head>', "html: css")
     p.write_text(s, encoding="utf-8")

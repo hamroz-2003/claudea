@@ -228,3 +228,12 @@ test("a missing image is covered by continuing the previous image, not by showin
   assert.deepEqual(c8.segs, [8, 9]); assert.deepEqual(c10.segs, [10]);
   assert.equal(c10.start, segs[9].start);
 });
+
+test("user-chosen hook frames win over the automatic choice", async () => {
+  const st = makeStory(12, 4);
+  const media = st.frames.map((_, i) => ({ name: String(i + 1).padStart(3, "0") + ".png" }));
+  const out = await S.build({ audio: st.audio, frameTexts: st.frames, media, callJSON: null, hookIds: [2, 5] });
+  assert.deepEqual(out.report.hooks, [2, 5]); assert.equal(out.report.hookSource, "user");
+  assert.deepEqual(out.clips.filter((c) => c.hook).map((c) => c.segs[0]), [2, 5]);
+  assert.ok(out.clips.find((c) => c.hook).motionPrompt.includes("push-in"));
+});

@@ -1,12 +1,51 @@
-/* FlowCraft V2: jang/qo'rquv sahnalari uchun yengil kamera silkinishi (preview) */
+/* FlowCraft V2 — kamera silkinishi, hook paneli va Sahnalar jadvali (ilova temasi o'zgaruvchilari bilan) */
 #bgl.mo-shake{animation:kbShake .9s linear infinite both;transform-origin:50% 50%}
-@keyframes kbShake{
-  0%{transform:scale(1.06) translate(0,0)}
-  20%{transform:scale(1.06) translate(-.35%,.2%)}
-  40%{transform:scale(1.06) translate(.3%,-.25%)}
-  60%{transform:scale(1.06) translate(-.2%,-.15%)}
-  80%{transform:scale(1.06) translate(.25%,.3%)}
-  100%{transform:scale(1.06) translate(0,0)}
+@keyframes kbShake{0%{transform:scale(1.06) translate(0,0)}20%{transform:scale(1.06) translate(-.35%,.2%)}40%{transform:scale(1.06) translate(.3%,-.25%)}60%{transform:scale(1.06) translate(-.2%,-.15%)}80%{transform:scale(1.06) translate(.25%,.3%)}100%{transform:scale(1.06) translate(0,0)}}
+.cl.hook{box-shadow:inset 0 0 0 2px var(--o1,#D6A049)}
+.cl.hook::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--o1,#D6A049)}
+
+/* umumiy */
+.v2c{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;border:1px solid var(--line-2,rgba(233,194,124,.3));font-size:12px;color:var(--ink-2,#ddd);white-space:nowrap}
+.v2c.ok{color:var(--ok,#8FD6A0);border-color:color-mix(in srgb,var(--ok,#8FD6A0) 45%,transparent)}
+.v2c.warn{color:var(--warn,#F2C766);border-color:color-mix(in srgb,var(--warn,#F2C766) 45%,transparent)}
+.v2c.err{color:var(--err,#F27B6B);border-color:color-mix(in srgb,var(--err,#F27B6B) 45%,transparent)}
+.v2mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink-2,#ccc);font-variant-numeric:tabular-nums}
+.v2hr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* 2-modul: hook paneli */
+#v2HookPanel .v2hl{display:grid;gap:10px;margin-top:12px}
+@media (min-width:900px){#v2HookPanel .v2hl{grid-template-columns:1fr 1fr}}
+.v2h{display:flex;gap:12px;padding:10px;border:1px solid var(--line,rgba(233,194,124,.13));border-radius:var(--r2,14px);background:var(--glass,rgba(255,246,228,.045))}
+.v2th{flex:none;align-self:flex-start;width:112px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--well,rgba(0,0,0,.34))}
+.v2th img{width:100%;height:100%;object-fit:cover;display:block}
+.v2hm{min-width:0;display:flex;flex-direction:column;gap:6px}
+.v2ht{font-size:13px;color:var(--ink-2,#ccc);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* 3-modul: Sahnalar jadvali */
+html.v2-lock,html.v2-lock body{overflow:hidden}
+#v2Scenes{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;background:var(--bg,#0e0b08);color:var(--ink,#f7f0e4)}
+#v2Scenes[hidden]{display:none}
+#v2Scenes .v2top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line,rgba(233,194,124,.13));padding-top:max(14px,env(safe-area-inset-top))}
+#v2Scenes h2{margin:0 0 6px;font-size:20px}
+#v2Scenes .v2stats{display:flex;gap:6px;flex-wrap:wrap}
+#v2Scenes .v2list{flex:1;overflow:auto;padding:14px 18px calc(24px + env(safe-area-inset-bottom));display:grid;gap:12px;align-content:start}
+.v2s{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:12px;border:1px solid var(--line,rgba(233,194,124,.13));border-radius:var(--r1,20px);background:var(--glass,rgba(255,246,228,.045))}
+.v2s.hook{border-color:color-mix(in srgb,var(--o1,#D6A049) 55%,transparent)}
+.v2scol{display:flex;flex-direction:column;gap:8px}
+.v2sm{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--well,rgba(0,0,0,.34))}
+.v2sm img{width:100%;height:100%;object-fit:cover;display:block}
+.v2sm.v2empty{display:grid;place-items:center;color:var(--ink-3,#999);font-size:13px;border:1px dashed var(--line-2,rgba(233,194,124,.3))}
+.v2tag{position:absolute;left:6px;top:6px;background:var(--o1,#D6A049);color:#1a1206;font-weight:700;font-size:11px;padding:2px 6px;border-radius:6px}
+.v2smain{min-width:0;display:flex;flex-direction:column;gap:8px}
+.v2n{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:15px;color:var(--o3,#E9C27C)}
+.v2tog{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2,#ccc);cursor:pointer}
+.v2f{display:flex;flex-direction:column;gap:4px}
+.v2f>span{font-size:12px;color:var(--ink-3,#999)}
+.v2f textarea{width:100%;resize:vertical;background:var(--well,rgba(0,0,0,.34));color:var(--ink,#f7f0e4);border:1px solid var(--line,rgba(233,194,124,.13));border-radius:10px;padding:8px 10px;font:inherit;font-size:14px;line-height:1.45}
+.v2f textarea:focus{outline:none;border-color:var(--o1,#D6A049)}
+@media (max-width:720px){
+  .v2s{grid-template-columns:1fr}
+  .v2tog{margin-left:0}
+  #v2Scenes .v2top{padding:12px}
+  #v2Scenes .v2list{padding:12px}
 }
-/* hook kadr belgisi (vaqt chizig'ida) */
-.clip.hook::after{content:"";position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#E0582A}

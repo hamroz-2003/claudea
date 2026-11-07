@@ -85,6 +85,24 @@
     });
     return out;
   };
+  /**
+   * Bir kadr uchun ham rasm (007.png), ham animatsiya (007.mp4) bo'lsa,
+   * montajga faqat video kiradi: rasm uning boshlang'ich kadri edi.
+   * Raqamsiz fayllar o'zgarishsiz qoladi.
+   */
+  function usableMedia(imgs) {
+    const vidFrames = new Set(imgs.filter((m) => isVid(m.rel) && FCSync.frameNumberOf(m.name || m.rel)).map((m) => FCSync.frameNumberOf(m.name || m.rel)));
+    return imgs.filter((m) => isVid(m.rel) || !vidFrames.has(FCSync.frameNumberOf(m.name || m.rel)));
+  }
+  V2.usableMedia = usableMedia;
+
+  /** Foydalanuvchi tanlagan hooklar: animatsiya prompti yozilgan yoki MP4 yuklangan kadrlar. */
+  function userHookIds(media) {
+    const ids = new Set(Object.keys(P.anim || {}).map(Number).filter((k) => k > 0));
+    if (ids.size) for (const m of media) if (m.isVideo) { const k = FCSync.frameNumberOf(m.name); if (k) ids.add(k); }
+    return [...ids].sort((a, b) => a - b);
+  }
+
   function validAnchors(audio, frames) {
     return audio && audio.anchors && audio.anchorSig === sig(frames) ? audio.anchors : [];
   }
@@ -105,7 +123,7 @@
       toast("Ovoz tinglanmoqda…");
       const audio = await FCSync.decode(await fetchBlob(a.rel));
       const media = [];
-      for (const im of imgs) {
+      for (const im of usableMedia(imgs)) {
         const video = isVid(im.rel);
         media.push({ name: im.name || im.rel, rel: im.rel, isVideo: video, duration: video ? await videoDuration(im.rel) : 0, segmentId: im.frame ?? null });
       }
@@ -116,7 +134,7 @@
       const out = await FCSync.build({
         audio, frameTexts: frames, media, anchors: validAnchors(a, P.frames || []),
         callJSON: hasAI ? callJSON : null, useVision: vision, language: P.lang || CFG.lang || "uz",
-        hookCount: 6, onStage: stage,
+        hookCount: 6, hookIds: userHookIds(media), onStage: stage,
       });
 
       const old = P.tl || tplSub(defaultTL());
@@ -132,7 +150,7 @@
       tl.sig = tlSig(); tl.stale = false; tl.edited = false; tl.total = audio.duration;
       P.tl = tl;
       P.media.audio.duration = audio.duration;
-      P.sync = { v: 2, report: out.report, segments: out.segments, at: Date.now() };
+      P.sync = { v: 2, report: out.report, segments: out.segments, frameSig: sig(P.frames || []), at: Date.now() };
       P.hookFrames = out.report.hooks;
       save(true);
 
