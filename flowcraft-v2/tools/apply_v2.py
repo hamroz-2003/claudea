@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-NEW_FILES = ["smartsync.js", "fc-v2.js", "scenes-v2.js", "v2.css"]
+NEW_FILES = ["smartsync.js", "presets-v2.js", "fc-v2.js", "scenes-v2.js", "v2.css"]
 
 
 def patch(text: str, old: str, new: str, label: str) -> str:
@@ -47,6 +47,30 @@ def main(src: Path, dst: Path) -> None:
     s = patch(s, "if(b){const n=P.frames?.length||0,c=+b.dataset.ahead;",
               "if(b){if(b.dataset.ahead==='auto'){$('#animSel').value=FCV2.hookFramesFromScript(6).map(x=>x+1).join(', ');return}"
               "const n=P.frames?.length||0,c=+b.dataset.ahead;", "app: auto hook selection")
+    # 4-modul: mavzu g'oyalari — xit videolarni klonlash o'rniga original g'oyalar
+    s = patch(s, "Yo'nalish: \"${t.n}\" (namuna kanal: ${t.channel}).\nQAT'IY MAVZU QULFI: faqat shu yo'nalishdan, boshqa sohadan mavzu berma.\n"
+                 "Sarlavha qolipi: ${t.topic.pattern}\nNamuna kanalning haqiqiy xit videolari: ${t.topic.hits.join(' | ')}",
+              "Yo'nalish: \"${t.n}\". Mavzular shu yo'nalish doirasida bo'lsin.\n"
+              "Sarlavha uchun ixtiyoriy namuna shakl: ${t.topic.pattern}\n"
+              "Original g'oya namunalari (faqat ilhom, nusxa olma): ${(t.topic.hits||[]).join(' | ')}\n"
+              "Boshqa kanallarning video nomlarini va formulalarini takrorlama: har sarlavha o'zingniki va mavzuning o'ziga xos qirrasiga asoslangan bo'lsin.",
+              "app: ideas prompt")
+    s = patch(s, "aynan qolip shaklida), \"c\" — qaysi xit video qolipidan klonlangani,",
+              "original va aniq), \"c\" — tomoshabinni nima ushlab turadi (sir, raqam yoki ziddiyat, 2–4 so'z),",
+              "app: ideas fields")
+    s = patch(s, "esc(x.c?'Klon: '+x.c:'Namuna')", "esc(x.c?x.c:'Namuna g\\'oya')", "app: idea tag")
+    s = patch(s, "toast('AI kaliti yo\\'q: namuna kanalning xit sarlavhalari ko\\'rsatildi')",
+              "toast('AI kaliti yo\\'q: namuna g\\'oyalar ko\\'rsatildi')", "app: ideas toast")
+    # 4-modul: kanal havolasi endi yo'q — promptlar va panelda "undefined" chiqmasin
+    s = patch(s, "<span><b>Namuna kanal:</b> ${esc(t.channel||'')}</span>",
+              "<span><b>Presetdan olinadi:</b> rasm uslubi, muqova va SEO. Ssenariy mavzuga qarab erkin yoziladi</span>",
+              "app: preset info panel")
+    s = patch(s, 'niche (reference: ${T.channel}). Write', 'niche. Write', "app: image prompt system")
+    s = patch(s, "Uslub ${T.channel} kanaliga o'xshash, lekin bu BOSHQA kanal: tavsif va sarlavhalarda namuna kanal nomini HECH QACHON yozma (masalan \"Subscribe to …\" da ham).",
+              "Tavsif va sarlavhalarda boshqa kanallarning nomini HECH QACHON yozma.", "app: seo prompt")
+    s = patch(s, "DOC_TPL.map((t,i)=>`${t.n.split(' (')[0]}.png",
+              "DOC_TPL.map((t,i)=>`${t.n.split(' (')[0].replace(/[\\\\/:*?\"<>|…]/g,'').trim()}.png",
+              "app: windows-safe sample file names")
     s = patch(s, "clips:clips().map((c,i)=>({img:c.img,d:c.d,motion:motionOf(i),",
               "clips:clips().map((c,i)=>({img:c.img,d:c.d,motion:motionOf(i),fit:c.fit||null,", "app: render job keeps fit")
     p.write_text(s, encoding="utf-8")
@@ -79,6 +103,8 @@ def main(src: Path, dst: Path) -> None:
               '<script src="smartsync.js"></script><script src="app.js"></script><script src="fc-v2.js"></script>'
               '<script src="scenes-v2.js"></script>',
               "html: scripts")
+    s = patch(s, '<script src="tpl_doc.js"></script>', '<script src="tpl_doc.js"></script><script src="presets-v2.js"></script>',
+              "html: presets script")
     s = patch(s, 'data-a="smart">Gaplarga moslab (aqlli)</button>',
               'data-a="smart">Aqlli: ovozni tinglab</button>', "html: smart label")
     s = patch(s, 'data-a="ai">AI bilan (aniq)</button>',

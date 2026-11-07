@@ -9,7 +9,7 @@ Bu papka FlowCraft 4.x ilovasining `assets` qismiga qo'shiladigan V2 modullarini
 | 1 | Aqlli audio-rasm sinxronizatori (STT + majburiy moslash + rasm ma'nosi + drift himoyasi) | **tayyor** | Asosiy xato shu yerda; qolgan modullar uning vaqt jadvaliga tayanadi |
 | 2 | Hook animatsiya dvigateli | **tayyor** (yadro + interfeys) | 1-modul aniq vaqt bergandan keyingina "birinchi 60 soniya" ma'noga ega |
 | 3 | Yagona sahna jadvali | **tayyor** | 1–2-modullar yaratgan `segments`, `clips.segs`, `hook` maydonlari jadval qatoriga aylanadi |
-| 4 | 14 ta kanal preseti (faqat uslub va SEO) | navbatda | Oldingi modullarga ta'sir qilmaydi, oxirida qo'shiladi |
+| 4 | 14 ta yo'nalish preseti (faqat uslub, muqova va SEO) | **tayyor** | Oldingi modullarga ta'sir qilmaydi, oxirida qo'shiladi |
 
 ## 1-modul: nima o'zgardi
 
@@ -66,6 +66,39 @@ Bu papka FlowCraft 4.x ilovasining `assets` qismiga qo'shiladigan V2 modullarini
 
 - **Yuqori panel:** holat (prompt, rasm va hook MP4 soni), filtrlar ("Hammasi", "Kamchiligi bor", "Hook kadrlar"), **"Montajni yangilash"** va "Montajga o'tish" tugmalari.
 
+## 4-modul: 14 ta yo'nalish preseti
+
+`presets-v2.js` fayli `tpl_doc.js` dan keyin va `app.js` dan oldin yuklanadi. U mavjud shablonlarni joyida yangilaydi, id'lar o'zgarmaydi, shuning uchun eski loyihalar ochilaveradi.
+
+| # | Preset | Vizual uslub |
+|---|---|---|
+| 1 | Tarix: imperiyalar va davlatlar | yassi 2D vektor multfilm |
+| 2 | Biznes va moliya anatomiyasi | zamonaviy biznes-tushuntirish multfilmi |
+| 3 | G'alati tarix va POV genetika | qorong'i yumorli 2D komiks |
+| 4 | Qadimgi odamlar hayoti | iliq ibtidoiy multfilm |
+| 5 | Inson ongi va falsafa | sokin, sirli minimal 2D |
+| 6 | Qo'rqinchli haqiqiy hikoyalar | qorong'i animatsion komiks |
+| 7 | Jamiyat psixologiyasi (bo'r masallari) | qora fonda oq bo'r chizmasi |
+| 8 | Tana ichida: 3D tibbiyot | stillashtirilgan 3D animatsion film |
+| 9 | Zamonaviy hayot melanxoliyasi (Wojak) | mem uslubidagi yassi chizma |
+| 10 | Korporatsiyalar tarixi | kinematik 2D hujjatli |
+| 11 | Tarixiy POV: agar sen o'sha davrda… | akvarel va qog'oz kesma |
+| 12 | Apokalipsis va omon qolish | keskin 2D multfilm |
+| 13 | Kasb bosqichlari va hayot | iliq 2D kundalik hayot |
+| 14 | **Tarixiy kundalik: bir kun hayoti** (yangi) | real kinematik tarixiy rasm |
+
+**Presetdan nima olinadi:** faqat rasm uslubi (`img`, personaj DNK maslahati), muqova formulalari (`thumbs`) va SEO qoidasi.
+
+**Nima o'zgardi:**
+- **Ssenariy erkin yoziladi:**
+  - V2 tizim prompti presetdan faqat ohang va ishonchlilik qoidalarini oladi;
+  - shablon strukturasi (`plan`, "TUZILISH: …" qoidalari) olib tashlandi;
+  - har video uchun yangi tuzilish, chuqur faktlar (aniq sana, ism, raqam, manba) va tomoshabinni ushlab turish talablari qo'shildi.
+- **Mavzu g'oyalari** endi "xit videodan klon" emas: original namunalar va o'ziga xos sarlavhalar so'raladi.
+- **Kanal nomlari olib tashlandi:** boshqa kanallarning nomi, havolasi va "X YouTube style" iboralari shablon nomlaridan, rasm va muqova promptlaridan hamda namunalardan tozalandi. Natijada rasm modeli aniq bir kanal brendini nusxalamaydi va ilova huquqiy jihatdan xavfsizroq bo'ladi.
+- **"undefined" xatolari tuzatildi:** kanal maydoni yo'qolgani sababli rasm, SEO va ma'lumot panelida "undefined" chiqib qolmasligi uchun tegishli joylar yamoqlandi.
+- **Fayl nomlari:** "Flow uchun promptlar" ro'yxatidagi fayl nomlarida Windows taqiqlagan belgilar yo'q.
+
 ## O'lchangan natijalar
 
 Sintetik nutqda sinaldi: verguldagi pauzalar, pauzasiz ulab o'qilgan gaplar va Gemini kabi xatolar (vaqt ±150 ms, 8% xato so'z, 3% tushib qolgan so'z).
@@ -91,7 +124,7 @@ python3 flowcraft-v2/tools/apply_v2.py <loyiha>/app/src/main/assets <loyiha>/app
 ```
 
 Skript:
-- `smartsync.js`, `fc-v2.js`, `scenes-v2.js` va `v2.css` fayllarini qo'shadi;
+- `smartsync.js`, `presets-v2.js`, `fc-v2.js`, `scenes-v2.js` va `v2.css` fayllarini qo'shadi;
 - `app.js`, `local.js` va `index.html` ga aniq yamoqlar qo'llaydi. Har bir almashtirish aynan bir marta mos kelishi kerak, aks holda skript to'xtaydi va hech narsani buzmaydi.
 
 Shundan keyin `versionCode` ni oshirib, o'z imzo kalitingiz bilan yangi APK yig'ing.
@@ -100,5 +133,6 @@ Shundan keyin `versionCode` ni oshirib, o'z imzo kalitingiz bilan yangi APK yig'
 
 ```bash
 node --test flowcraft-v2/tests/smartsync.test.js      # 15 ta test, ~3 s
+FC_ASSETS=<asl assets> node --test flowcraft-v2/tests/presets.test.js   # 4-modul
 # brauzer testlari (yamoqlangan ilova ustida): tests/e2e_browser.js, tests/e2e_modules23.js
 ```

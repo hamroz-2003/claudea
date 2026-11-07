@@ -170,6 +170,27 @@
     }
   };
 
+  // ------------------------------------------ 4-modul: erkin ssenariy prompti --
+  /**
+   * Presetdan faqat ohang va xavfsizlik/ishonchlilik qoidalari olinadi; tuzilish,
+   * bo'limlar soni va sarlavha qolipi mavzuning o'zidan chiqadi. Chuqur faktlar
+   * va tomoshabinni ushlab turish talablari har doim qo'shiladi.
+   */
+  if (typeof window.sysBase0 === "function") {
+    window.sysBase0 = function () {
+      const t = tplOf(P.tpl);
+      const rules = window.FCV2_PRESETS ? FCV2_PRESETS.stripStructure(t.rules || t.system || "") : (t.rules || "");
+      return `${t.role || "Sen tajribali YouTube hujjatli video ssenaristisan."}
+Yo'nalish: "${t.n}". Bu yo'nalishdan faqat OHANG (${t.tone || "tabiiy"}) va ishonchlilik/xavfsizlik qoidalari olinadi; vizual uslub alohida beriladi.
+${rules}
+${typeof COMMON_SCRIPT !== "undefined" ? COMMON_SCRIPT : ""}
+ERKIN TUZILISH: hikoya tuzilishini, bo'limlar sonini va tartibini, hook va yakunni faqat mavzuning o'zi belgilaydi. Tayyor qolip, formula yoki boshqa kanal tuzilishini ishlatma; har video uchun yangi tuzilish qur.
+CHUQUR FAKTLAR: aniq sana, ism, joy va raqamlar; har muhim da'vo ishonchli manbaga tayansin; bilmagan yoki tasdiqlanmagan narsani yozma. Mavzuning kam ma'lum, hayratlanarli tomonlarini top, umumiy gaplar bilan to'ldirma.
+TOMOSHABINNI USHLAB TURISH: birinchi 15 soniyada aniq va'da yoki savol; har bo'lim oxirida keyingisiga ochiq savol qoldir va keyin albatta javobini ber; har 20–30 soniyada yangi fakt yoki burilish bo'lsin.
+${toneLine()}Ssenariy tili: ${LANGN[P.lang] || LANGN.en}. Boshqa tilni aralashtirma. Faqat ovozda o'qiladigan matnni yoz.`;
+    };
+  }
+
   /** Animatsiya promptlari qadamida: birinchi daqiqadagi eng dramatik kadrlar. */
   V2.hookFramesFromScript = function (count = 6) {
     const frames = (P.frames || []).map((x) => String(x || "").trim());
