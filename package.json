@@ -1,0 +1,41 @@
+{
+  "name": "ryzon-uz-autopilot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ryzon Uz: tahlil -> ssenariy -> 2.5D render -> YouTube nashr avtomatik tizimi",
+  "scripts": {
+    "setup": "node scripts/make_sfx.js",
+    "studio": "remotion studio src/index.ts",
+    "validate": "node scripts/validate_episode.js",
+    "render": "node generate_episode.js --render-only",
+    "generate": "node generate_episode.js",
+    "autopilot": "node autopilot_channel.js",
+    "autopilot:dry": "node autopilot_channel.js --dry-run",
+    "analyze": "node analyze_channel.js",
+    "publish": "node publish.js",
+    "auth": "node youtube_auth.js",
+    "check": "node scripts/check_all.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.4.0",
+    "@remotion/cli": "4.0.543",
+    "@remotion/three": "4.0.543",
+    "ajv": "8.17.1",
+    "dotenv": "17.2.3",
+    "googleapis": "164.1.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.543",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.13",
+    "@types/three": "0.180.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run validate:*)",
+      "Bash(npm run check)",
+      "Bash(npm run render:*)",
+      "Bash(npm run analyze)",
+      "Bash(npm run setup)",
+      "Bash(node scripts/validate_episode.js:*)",
+      "Bash(npx remotion still:*)",
+      "Bash(npx tsc --noEmit)",
+      "mcp__vidIQ_for_Claude__vidiq_user_channels",
+      "mcp__vidIQ_for_Claude__vidiq_channel_analytics",
+      "mcp__vidIQ_for_Claude__vidiq_user_videos"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Bash(cat .env:*)",
+      "Bash(git push --force:*)"
+    ],
+    "ask": [
+      "Bash(npm run autopilot:*)",
+      "Bash(npm run publish:*)",
+      "Bash(node publish.js:*)",
+      "Bash(node autopilot_channel.js:*)"
+    ]
+  }
+}

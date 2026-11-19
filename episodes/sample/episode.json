@@ -1,0 +1,1083 @@
+{
+  "slug": "daddy-is-a-phone",
+  "series": "STANDALONE",
+  "pillar": "family",
+  "format": "long",
+  "language": "en",
+  "title": "DADDY IS A PHONE | He Worked Abroad for 5 Years | Animated Short Film",
+  "description": "He left so his daughter could have everything. Five years later, she asked her mom: \"Who is he?\"\n\nA silent animated short film about the millions of fathers and mothers who work far from home — and the price nobody puts on the payslip.\n\nIf someone you love is far away right now, call them today. Not tomorrow.\n\nRyzon is a silent animated universe about the problems people don't say out loud: family, loneliness, addiction and regret.\n\nTell us in the comments: who are you working for?\n\n#animatedshortfilm #workingabroad #fatheranddaughter",
+  "tags": [
+    "animated short film",
+    "father and daughter",
+    "working abroad",
+    "ofw",
+    "overseas worker",
+    "migrant worker",
+    "emotional short film",
+    "sad animation",
+    "family short film",
+    "call your family",
+    "life lesson",
+    "regret",
+    "stickman animation",
+    "silent short film",
+    "ryzon"
+  ],
+  "logline": "A father works abroad for five years to give his daughter a better life, and comes home to find she only knows him as a voice on a phone.",
+  "realProblem": "Millions of parents work far from their children; the money arrives every month, but birthdays, first words and bedtime stories don't come back.",
+  "sensitive": false,
+  "cast": [
+    {
+      "id": "ryzon",
+      "label": "Ryzon (father)",
+      "hoodie": "yellow",
+      "scale": 1
+    },
+    {
+      "id": "lola",
+      "label": "Lola (daughter)",
+      "hoodie": "red",
+      "scale": 0.62
+    },
+    {
+      "id": "mom",
+      "label": "Mother",
+      "hoodie": "blue",
+      "scale": 0.95
+    }
+  ],
+  "thumbnail": {
+    "text": "WHO IS HE?",
+    "subtext": "5 YEARS ABROAD",
+    "emotion": "sad",
+    "environment": "living_room",
+    "timeOfDay": "dusk",
+    "accent": "yellow"
+  },
+  "scenes": [
+    {
+      "id": "s01",
+      "beat": "cold_open",
+      "durationSec": 5,
+      "environment": "living_room",
+      "timeOfDay": "dusk",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.6
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "kneel",
+          "emotion": "hopeful",
+          "x": 0.3
+        },
+        {
+          "castId": "mom",
+          "pose": "stand",
+          "emotion": "sad",
+          "x": 0.68,
+          "facing": "left"
+        },
+        {
+          "castId": "lola",
+          "pose": "stand",
+          "emotion": "anxious",
+          "x": 0.76,
+          "facing": "left"
+        }
+      ],
+      "caption": {
+        "text": "Lola: \"Mama… who is he?\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_low",
+      "transition": "blackout",
+      "chapter": "Who is he?"
+    },
+    {
+      "id": "s02",
+      "beat": "hook",
+      "durationSec": 4,
+      "environment": "living_room",
+      "timeOfDay": "dusk",
+      "camera": {
+        "move": "shake",
+        "intensity": 0.3
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "kneel",
+          "emotion": "shocked",
+          "x": 0.3
+        }
+      ],
+      "sfx": [
+        "heartbeat"
+      ],
+      "music": "none"
+    },
+    {
+      "id": "s03",
+      "beat": "hook",
+      "durationSec": 3.5,
+      "environment": "void",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [],
+      "caption": {
+        "text": "5 years earlier",
+        "style": "title"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "none",
+      "transition": "flash"
+    },
+    {
+      "id": "s04",
+      "beat": "setup",
+      "durationSec": 7.5,
+      "environment": "bedroom",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "orbit_left",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "happy",
+          "x": 0.45
+        },
+        {
+          "castId": "lola",
+          "pose": "lie",
+          "emotion": "happy",
+          "x": 0.62
+        }
+      ],
+      "props": [
+        "lamp"
+      ],
+      "caption": {
+        "text": "Every night, the same story. She never let him skip a page.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "clock_tick"
+      ],
+      "music": "pad_hope",
+      "transition": "fade",
+      "chapter": "The day he left"
+    },
+    {
+      "id": "s05",
+      "beat": "setup",
+      "durationSec": 6,
+      "environment": "kitchen",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "head_in_hands",
+          "emotion": "anxious",
+          "x": 0.4
+        },
+        {
+          "castId": "mom",
+          "pose": "stand",
+          "emotion": "sad",
+          "x": 0.62,
+          "facing": "left"
+        }
+      ],
+      "props": [
+        "calendar"
+      ],
+      "caption": {
+        "text": "Rent. School. Medicine. The numbers never added up.",
+        "style": "thought"
+      },
+      "sfx": [
+        "hum",
+        "clock_tick"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s06",
+      "beat": "tension",
+      "durationSec": 5,
+      "environment": "kitchen",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "determined",
+          "x": 0.4
+        }
+      ],
+      "caption": {
+        "text": "Job offer: 3 years abroad. 4x salary.",
+        "style": "message"
+      },
+      "sfx": [
+        "notification"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s07",
+      "beat": "setup",
+      "durationSec": 7.5,
+      "environment": "street",
+      "timeOfDay": "dawn",
+      "camera": {
+        "move": "pull_out",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "hug",
+          "emotion": "sad",
+          "x": 0.45
+        },
+        {
+          "castId": "lola",
+          "pose": "hug",
+          "emotion": "sad",
+          "x": 0.53,
+          "facing": "left"
+        },
+        {
+          "castId": "mom",
+          "pose": "stand",
+          "emotion": "sad",
+          "x": 0.68,
+          "facing": "left"
+        }
+      ],
+      "caption": {
+        "text": "\"Only three years, Lola. I promise.\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "wind"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s08",
+      "beat": "setup",
+      "durationSec": 5,
+      "environment": "street",
+      "timeOfDay": "dawn",
+      "camera": {
+        "move": "pan_left",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "walk",
+          "emotion": "sad",
+          "x": 0.55,
+          "toX": 0.12,
+          "facing": "left"
+        },
+        {
+          "castId": "lola",
+          "pose": "reach",
+          "emotion": "sad",
+          "x": 0.8,
+          "facing": "left"
+        }
+      ],
+      "sfx": [
+        "footsteps",
+        "wind"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s09",
+      "beat": "setup",
+      "durationSec": 5,
+      "environment": "office",
+      "timeOfDay": "day",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.3
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "tired",
+          "x": 0.35
+        }
+      ],
+      "caption": {
+        "text": "MONTH 1",
+        "style": "counter"
+      },
+      "sfx": [
+        "ui_click",
+        "hum"
+      ],
+      "music": "pad_low",
+      "chapter": "Every month, the money arrived"
+    },
+    {
+      "id": "s10",
+      "beat": "setup",
+      "durationSec": 6,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "orbit_right",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "happy",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "Lola: \"Daddy!! I lost a tooth!!\"",
+        "style": "message"
+      },
+      "sfx": [
+        "wind",
+        "notification"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s11",
+      "beat": "setup",
+      "durationSec": 5,
+      "environment": "office",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "tired",
+          "x": 0.35
+        }
+      ],
+      "props": [
+        "clock"
+      ],
+      "caption": {
+        "text": "MONTH 14 — double shifts",
+        "style": "counter"
+      },
+      "sfx": [
+        "clock_tick",
+        "hum"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s11b",
+      "beat": "tension",
+      "durationSec": 6,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "pan_right",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "tired",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "Mom: \"She asks about you less now.\"",
+        "style": "message"
+      },
+      "sfx": [
+        "wind"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s11c",
+      "beat": "tension",
+      "durationSec": 6,
+      "environment": "bus_stop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "sad",
+          "x": 0.4
+        }
+      ],
+      "caption": {
+        "text": "He told himself: one more year. Then everything will be fine.",
+        "style": "thought"
+      },
+      "sfx": [
+        "rain"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s12",
+      "beat": "tension",
+      "durationSec": 6,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "sad",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "Lola: \"ok. bye daddy\"",
+        "style": "message"
+      },
+      "sfx": [
+        "wind"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s13",
+      "beat": "tension",
+      "durationSec": 5,
+      "environment": "void",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static",
+        "intensity": 0.2
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "stand",
+          "emotion": "sad",
+          "x": 0.5
+        }
+      ],
+      "caption": {
+        "text": "The calls got shorter. The money got bigger.",
+        "style": "thought"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s14",
+      "beat": "tension",
+      "durationSec": 5,
+      "environment": "office",
+      "timeOfDay": "day",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "anxious",
+          "x": 0.4
+        }
+      ],
+      "caption": {
+        "text": "Contract extended: +2 years.",
+        "style": "message"
+      },
+      "sfx": [
+        "notification"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s15",
+      "beat": "turn",
+      "durationSec": 4,
+      "environment": "void",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [],
+      "caption": {
+        "text": "YEAR 4",
+        "style": "counter"
+      },
+      "sfx": [
+        "clock_tick"
+      ],
+      "music": "none",
+      "transition": "blackout",
+      "chapter": "Six candles"
+    },
+    {
+      "id": "s16",
+      "beat": "turn",
+      "durationSec": 6,
+      "environment": "living_room",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "orbit_left",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "lola",
+          "pose": "stand",
+          "emotion": "happy",
+          "x": 0.45
+        },
+        {
+          "castId": "mom",
+          "pose": "stand",
+          "emotion": "happy",
+          "x": 0.6,
+          "facing": "left"
+        }
+      ],
+      "props": [
+        "tv"
+      ],
+      "caption": {
+        "text": "Back home: 6 candles.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "crowd"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s16b",
+      "beat": "turn",
+      "durationSec": 5,
+      "environment": "living_room",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "lola",
+          "pose": "look_phone",
+          "emotion": "hopeful",
+          "x": 0.5
+        }
+      ],
+      "caption": {
+        "text": "Lola: \"Is daddy coming?\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "crowd"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s17",
+      "beat": "turn",
+      "durationSec": 6,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.6
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "anxious",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "Connecting… Connecting… Poor connection.",
+        "style": "message"
+      },
+      "sfx": [
+        "ui_click",
+        "wind"
+      ],
+      "music": "pulse"
+    },
+    {
+      "id": "s18",
+      "beat": "climax",
+      "durationSec": 5,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "crane_up",
+        "intensity": 0.7
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "head_in_hands",
+          "emotion": "ashamed",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "She blew out her candles on a frozen screen.",
+        "style": "thought"
+      },
+      "sfx": [
+        "wind",
+        "heartbeat"
+      ],
+      "music": "pulse"
+    },
+    {
+      "id": "s19",
+      "beat": "climax",
+      "durationSec": 6,
+      "environment": "bedroom",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "lola",
+          "pose": "sit",
+          "emotion": "neutral",
+          "x": 0.5
+        }
+      ],
+      "props": [
+        "lamp",
+        "desk"
+      ],
+      "caption": {
+        "text": "Teacher: \"Draw your family.\"",
+        "style": "whisper"
+      },
+      "sfx": [
+        "clock_tick"
+      ],
+      "music": "pad_low",
+      "transition": "fade",
+      "chapter": "The drawing"
+    },
+    {
+      "id": "s20",
+      "beat": "climax",
+      "durationSec": 7.5,
+      "environment": "bedroom",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.8
+      },
+      "characters": [
+        {
+          "castId": "lola",
+          "pose": "sit",
+          "emotion": "happy",
+          "x": 0.5
+        }
+      ],
+      "props": [
+        "lamp",
+        "desk"
+      ],
+      "caption": {
+        "text": "Mama. Me. And Daddy — a phone.",
+        "style": "title"
+      },
+      "sfx": [
+        "heartbeat"
+      ],
+      "music": "none",
+      "notes": "Asosiy zarba. 1.5 s jimlik — sahna oxirigacha musiqasiz"
+    },
+    {
+      "id": "s21",
+      "beat": "climax",
+      "durationSec": 6,
+      "environment": "rooftop",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "look_phone",
+          "emotion": "shocked",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "Mom sent a photo of the drawing. No words.",
+        "style": "message"
+      },
+      "sfx": [
+        "notification"
+      ],
+      "music": "none"
+    },
+    {
+      "id": "s21b",
+      "beat": "climax",
+      "durationSec": 6,
+      "environment": "void",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "crane_up",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "kneel",
+          "emotion": "ashamed",
+          "x": 0.5
+        }
+      ],
+      "caption": {
+        "text": "He built her a future. She grew up without him in it.",
+        "style": "thought"
+      },
+      "sfx": [
+        "heartbeat"
+      ],
+      "music": "pad_low"
+    },
+    {
+      "id": "s22",
+      "beat": "resolution",
+      "durationSec": 5,
+      "environment": "office",
+      "timeOfDay": "day",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.6
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "stand",
+          "emotion": "determined",
+          "x": 0.45
+        }
+      ],
+      "caption": {
+        "text": "\"I'm going home.\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_low",
+      "transition": "flash",
+      "chapter": "Home"
+    },
+    {
+      "id": "s23",
+      "beat": "resolution",
+      "durationSec": 6,
+      "environment": "street",
+      "timeOfDay": "dusk",
+      "camera": {
+        "move": "pan_right",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "walk",
+          "emotion": "hopeful",
+          "x": 0.15,
+          "toX": 0.62
+        }
+      ],
+      "caption": {
+        "text": "Same street. Smaller than he remembered.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "footsteps",
+        "wind"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s24",
+      "beat": "resolution",
+      "durationSec": 6,
+      "environment": "living_room",
+      "timeOfDay": "dusk",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "kneel",
+          "emotion": "sad",
+          "x": 0.3
+        },
+        {
+          "castId": "mom",
+          "pose": "stand",
+          "emotion": "sad",
+          "x": 0.68,
+          "facing": "left"
+        },
+        {
+          "castId": "lola",
+          "pose": "stand",
+          "emotion": "anxious",
+          "x": 0.76,
+          "facing": "left"
+        }
+      ],
+      "caption": {
+        "text": "Lola: \"Mama… who is he?\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_low",
+      "notes": "Cold open qaytadi — endi tomoshabin hammasini biladi"
+    },
+    {
+      "id": "s25",
+      "beat": "resolution",
+      "durationSec": 8.5,
+      "environment": "living_room",
+      "timeOfDay": "dusk",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "kneel",
+          "emotion": "hopeful",
+          "x": 0.42
+        },
+        {
+          "castId": "lola",
+          "pose": "stand",
+          "emotion": "neutral",
+          "x": 0.6,
+          "facing": "left"
+        }
+      ],
+      "caption": {
+        "text": "He didn't explain. He opened the old book. Page one.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s26",
+      "beat": "resolution",
+      "durationSec": 7,
+      "environment": "bedroom",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "pull_out",
+        "intensity": 0.6
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "happy",
+          "x": 0.45
+        },
+        {
+          "castId": "lola",
+          "pose": "lie",
+          "emotion": "happy",
+          "x": 0.62
+        }
+      ],
+      "props": [
+        "lamp"
+      ],
+      "caption": {
+        "text": "Lola: \"You skipped a page.\"",
+        "style": "thought"
+      },
+      "sfx": [
+        "clock_tick"
+      ],
+      "music": "pad_hope",
+      "transition": "fade"
+    },
+    {
+      "id": "s26b",
+      "beat": "resolution",
+      "durationSec": 6,
+      "environment": "park",
+      "timeOfDay": "day",
+      "camera": {
+        "move": "pan_right",
+        "intensity": 0.5
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "walk",
+          "emotion": "happy",
+          "x": 0.2,
+          "toX": 0.6
+        },
+        {
+          "castId": "lola",
+          "pose": "walk",
+          "emotion": "happy",
+          "x": 0.28,
+          "toX": 0.68
+        }
+      ],
+      "caption": {
+        "text": "Less money. More mornings.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "footsteps",
+        "wind"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s27",
+      "beat": "resolution",
+      "durationSec": 5,
+      "environment": "bedroom",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "push_in",
+        "intensity": 0.4
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "sit",
+          "emotion": "hopeful",
+          "x": 0.45
+        },
+        {
+          "castId": "lola",
+          "pose": "lie",
+          "emotion": "happy",
+          "x": 0.62
+        }
+      ],
+      "props": [
+        "lamp",
+        "phone"
+      ],
+      "caption": {
+        "text": "His phone buzzed on the floor. He let it.",
+        "style": "whisper"
+      },
+      "sfx": [
+        "notification"
+      ],
+      "music": "pad_hope"
+    },
+    {
+      "id": "s28",
+      "beat": "cta",
+      "durationSec": 12,
+      "environment": "void",
+      "timeOfDay": "night",
+      "camera": {
+        "move": "static"
+      },
+      "characters": [
+        {
+          "castId": "ryzon",
+          "pose": "stand",
+          "emotion": "hopeful",
+          "x": 0.3
+        }
+      ],
+      "caption": {
+        "text": "Who are you working for?",
+        "style": "title"
+      },
+      "sfx": [
+        "hum"
+      ],
+      "music": "pad_low",
+      "notes": "End screen: chapda 'I'M BUSY, DAD', o'ngda obuna tugmasi"
+    }
+  ],
+  "shortScenes": [
+    "s01",
+    "s02",
+    "s10",
+    "s12",
+    "s17",
+    "s18",
+    "s20",
+    "s24",
+    "s26"
+  ]
+}

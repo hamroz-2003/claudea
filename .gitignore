@@ -1,0 +1,7 @@
+node_modules/
+.env
+output/
+public/sfx/*.wav
+data/analytics/
+data/runs/
+*.log
